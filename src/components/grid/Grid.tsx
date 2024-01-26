@@ -17,14 +17,12 @@ export const Grid = () => {
           x: x,
           mine: false,
           nearByMine: 0,
+          mask: true,
         }
         arr[i].push(item)
       }
     }
     return arr
-  }
-  const gameOverHandler = () => {
-    setGame(false)
   }
 
   const randomlyChangeMines = (
@@ -46,7 +44,6 @@ export const Grid = () => {
     }
   }
 
-  // Calculate and display numbers on tiles indicating nearby mines.
   // calculate {x, y}
   // x-1,y-1
   // x-1,y
@@ -76,20 +73,34 @@ export const Grid = () => {
         if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
           if (arr[yVal][xVal].mine == true) {
             arr[y][x].nearByMine = arr[y][x].nearByMine + 1
-            // return true
           }
         }
-        // if (checkIfItemValid(xVal, yVal) == true) {
-        //   if (arr[xVal][yVal].mine == true) return true
-        // }
       }
     }
     return false
   }
 
+  // Allow the player to reveal tiles and mark potential mines.
+  const girdItemClickHandler = (x, y, mine) => {
+    //if click on mine, then game over
+    if (mine) {
+      setGame(false)
+    }
+
+    // unmask the ones with near by mines
+  }
+
   const arr = generateArrayOfArr(gridSize)
+
   // console.log("What is arr: ", arr)
-  randomlyChangeMines(arr, 5)
+  randomlyChangeMines(arr, 10)
+
+  // y: i,
+  // x: x,
+  // mine: false,
+  // nearByMine: 0,
+  // mask: true,
+
   // console.log("what is after rnadom changes: ", arr)
 
   return (
@@ -99,19 +110,20 @@ export const Grid = () => {
         return (
           <div {...stylex.props(gridStyles.xArr)} key={key}>
             {eachArr.map((item: ItemType, key) => {
-              const nearByMineResult = calcuateNearbyMines(item.x, item.y, arr)
-              console.log(
-                "Near By Mine Result x y ",
-                item.x,
-                item.y,
-                nearByMineResult
-              )
+              // const nearByMineResult = calcuateNearbyMines(item.x, item.y, arr)
+              calcuateNearbyMines(item.x, item.y, arr)
+              // console.log(
+              //   "Near By Mine Result x y ",
+              //   item.x,
+              //   item.y,
+              //   nearByMineResult
+              // )
               return (
                 <GridItem
                   item={item}
                   key={key}
-                  gameOver={gameOverHandler}
-                  // nearByMineResult={nearByMineResult}
+                  // gameOverHandler={gameOverHandler}
+                  girdItemClickHandler={girdItemClickHandler}
                 />
               )
             })}

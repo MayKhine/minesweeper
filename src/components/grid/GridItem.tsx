@@ -5,35 +5,32 @@ export type ItemType = {
   y: number
   mine: boolean
   nearByMine: number
+  mask: boolean
 }
 
 export type GridItemProps = {
   item: ItemType
-  gameOver: () => void
-  nearByMineResult?: boolean
+  // gameOver: () => void
+  girdItemClickHandler: (x: number, y: number, mine: boolean) => void
 }
 
 export const GridItem = ({
   item,
-  gameOver,
-  nearByMineResult,
+  // gameOver,
+  girdItemClickHandler,
 }: GridItemProps) => {
-  const onClickFn = () => {
-    if (item.mine) {
-      gameOver()
-      console.log("BOOMB")
-    }
-  }
   return (
     <div
       {...stylex.props(
         gridItemStyles.base,
         gridItemStyles.dynamicOption(item.mine, item.nearByMine)
       )}
-      onClick={onClickFn}
+      onClick={() => {
+        girdItemClickHandler(item.x, item.y, item.mine)
+      }}
     >
-      {/* x: {item.x} , y: {item.y} */}
-      {item.nearByMine}
+      {!item.mask && <p>{item.nearByMine}</p>}
+      {/* {item.nearByMine} */}
     </div>
   )
 }
