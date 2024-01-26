@@ -4,7 +4,6 @@ import { GridItem, ItemType } from "./GridItem"
 import { useState } from "react"
 
 export const Grid = () => {
-  const gridSize = 10
   const [game, setGame] = useState(true)
 
   const generateArrayOfArr = (num: number) => {
@@ -13,8 +12,8 @@ export const Grid = () => {
       arr.push([])
       for (let x = 0; x < num; x++) {
         const item: ItemType = {
-          y: i,
           x: x,
+          y: i,
           mine: false,
           nearByMine: 0,
           mask: true,
@@ -62,17 +61,28 @@ export const Grid = () => {
     y: number,
     arr: Array<Array<ItemType>>
   ) => {
-    for (let i = 0; i < 3; i++) {
-      const xVal = x + i - 1
-      console.log("Current X Val: ", xVal)
-      for (let i2 = 0; i2 < 3; i2++) {
-        const yVal = y + i2 - 1
-        console.log("Current Y Val: ", yVal)
-        // console.log(x, y, xVal, yVal, checkIfItemValid(xVal, yVal))
+    // for (let i = 0; i < 3; i++) {
+    //   const xVal = x + i - 1
+    //   console.log("Current X Val: ", xVal)
+    //   for (let i2 = 0; i2 < 3; i2++) {
+    //     const yVal = y + i2 - 1
+    //     console.log("Current Y Val: ", yVal)
+    //     // console.log(x, y, xVal, yVal, checkIfItemValid(xVal, yVal))
+    //     if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
+    //       if (arr[yVal][xVal].mine == true) {
+    //         arr[y][x].nearByMine = arr[y][x].nearByMine + 1
+    //       }
+    //     }
+    //   }
+    // }
 
+    for (let i = 0; i < 3; i++) {
+      const yVal = y + i - 1
+      for (let i2 = 0; i2 < 3; i2++) {
+        const xVal = x + i2 - 1
         if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
-          if (arr[yVal][xVal].mine == true) {
-            arr[y][x].nearByMine = arr[y][x].nearByMine + 1
+          if (arr[xVal][yVal].mine == true) {
+            arr[x][y].nearByMine = arr[x][y].nearByMine + 1
           }
         }
       }
@@ -81,49 +91,79 @@ export const Grid = () => {
   }
 
   // Allow the player to reveal tiles and mark potential mines.
-  const girdItemClickHandler = (x, y, mine) => {
+  const girdItemClickHandler = (x, y, mine, arr: Array<Array<ItemType>>) => {
     //if click on mine, then game over
     if (mine) {
       setGame(false)
     }
 
     // unmask the ones with near by mines
+    console.log("Clicked on : ", x, y)
+
+    //make a copy of current grid arr
+    const tempArr = gridArr
+    //check X left and right on the same Y
+    for (let left = x - 1; left >= 0; left--) {
+      if (tempArr[y][left].nearByMine > 0) {
+        console.log("Found near by mine left check", left, y)
+        tempArr[y][left].mask = false
+        return
+        // update state
+        // const newArr = gridArr
+        // console.log("New Arr: ", newArr)
+        // newArr[y][left].mask = false
+        // console.log("New Arr with mark update: ", newArr)
+
+        // return setGridArr([...newArr])
+      } else {
+        tempArr[y][left].mask = false
+      }
+    }
+    for (let right = x + 1; right < gridSize; right++) {
+      if (tempArr[y][right].nearByMine > 0) {
+        tempArr[y][right].mask = false
+        return
+      } else {
+        tempArr[y][right].mask = false
+      }
+    }
+
+    // const newArr = gridArr
+    // console.log("New Arr: ", newArr)
+    // newArr[y][left].mask = false
+    // console.log("New Arr with mark update: ", newArr)
+
+    return setGridArr([...tempArr])
   }
 
+  const gridSize = 3
   const arr = generateArrayOfArr(gridSize)
-
   // console.log("What is arr: ", arr)
-  randomlyChangeMines(arr, 10)
+  randomlyChangeMines(arr, 1)
+  arr.map((xArr) => {
+    xArr.map((item: ItemType) => {
+      calcuateNearbyMines(item.x, item.y, arr)
+    })
+  })
 
-  // y: i,
-  // x: x,
-  // mine: false,
-  // nearByMine: 0,
-  // mask: true,
-
-  // console.log("what is after rnadom changes: ", arr)
+  const [gridArr, setGridArr] = useState(arr)
+  console.log("What is grid Arr  , ", gridArr)
 
   return (
     <div {...stylex.props(gridStyles.base)}>
       {!game && <div>Game Over</div>}
-      {arr.map((eachArr, key) => {
+      {/* {arr.map((eachArr, key) => { */}
+      {gridArr.map((eachArr, key) => {
         return (
           <div {...stylex.props(gridStyles.xArr)} key={key}>
             {eachArr.map((item: ItemType, key) => {
-              // const nearByMineResult = calcuateNearbyMines(item.x, item.y, arr)
-              calcuateNearbyMines(item.x, item.y, arr)
-              // console.log(
-              //   "Near By Mine Result x y ",
-              //   item.x,
-              //   item.y,
-              //   nearByMineResult
-              // )
+              // calcuateNearbyMines(item.x, item.y, arr)
               return (
                 <GridItem
                   item={item}
                   key={key}
-                  // gameOverHandler={gameOverHandler}
                   girdItemClickHandler={girdItemClickHandler}
+                  arr={gridArr}
                 />
               )
             })}

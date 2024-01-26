@@ -11,13 +11,20 @@ export type ItemType = {
 export type GridItemProps = {
   item: ItemType
   // gameOver: () => void
-  girdItemClickHandler: (x: number, y: number, mine: boolean) => void
+  girdItemClickHandler: (
+    x: number,
+    y: number,
+    mine: boolean,
+    arr: Array<Array<ItemType>>
+  ) => void
+  arr: Array<Array<ItemType>>
 }
 
 export const GridItem = ({
   item,
   // gameOver,
   girdItemClickHandler,
+  arr,
 }: GridItemProps) => {
   return (
     <div
@@ -26,10 +33,12 @@ export const GridItem = ({
         gridItemStyles.dynamicOption(item.mine, item.nearByMine)
       )}
       onClick={() => {
-        girdItemClickHandler(item.x, item.y, item.mine)
+        console.log("My mask: ", item.mask)
+        girdItemClickHandler(item.x, item.y, item.mine, arr)
       }}
     >
-      {!item.mask && <p>{item.nearByMine}</p>}
+      {item.mask && <p> mask</p>}
+      {/* {!item.mask && <p>{item.nearByMine}</p>} */}
       {/* {item.nearByMine} */}
     </div>
   )
