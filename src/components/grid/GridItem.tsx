@@ -1,18 +1,20 @@
 import * as stylex from "@stylexjs/stylex"
 
 export type ItemType = {
-  i: number
   x: number
+  y: number
   mine: boolean
 }
 
 export type GridItemProps = {
   item: ItemType
+  gameOver: () => void
 }
 
-export const GridItem = ({ item }: GridItemProps) => {
+export const GridItem = ({ item, gameOver }: GridItemProps) => {
   const onClickFn = () => {
     if (item.mine) {
+      gameOver()
       console.log("BOOMB")
     }
   }

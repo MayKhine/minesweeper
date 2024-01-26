@@ -26,10 +26,10 @@ Create a Minesweeper game where the player uncovers tiles on a grid, trying to a
 
 #### Steps to Build:
 
-- Set up a new React project with TypeScript.
-- Create a component to generate the Minesweeper grid.
-- Implement logic for placing mines randomly on the grid.
-- Calculate and display numbers on tiles indicating nearby mines.
+- Y: Set up a new React project with TypeScript.
+- Y: Create a component to generate the Minesweeper grid.
+- Y: Implement logic for placing mines randomly on the grid.
+- ?? : Calculate and display numbers on tiles indicating nearby mines.
 - Allow the player to reveal tiles and mark potential mines.
 - Implement game logic for uncovering tiles and determining game outcomes.
 - Track and display the player's score and time.
