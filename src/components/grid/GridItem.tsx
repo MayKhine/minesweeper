@@ -26,7 +26,6 @@ export const GridItem = ({
   girdItemClickHandler,
   arr,
 }: GridItemProps) => {
-  console.log("time. mask ", item.mask)
   return (
     <div
       {...stylex.props(

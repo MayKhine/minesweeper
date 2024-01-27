@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { GridItem, ItemType } from "./GridItem"
 import { useState } from "react"
 
+export type GridArrType = Array<Array<ItemType>>
 export const Grid = () => {
   const [game, setGame] = useState(true)
 
@@ -43,19 +44,6 @@ export const Grid = () => {
     }
   }
 
-  // calculate {x, y}
-  // x-1,y-1
-  // x-1,y
-  // x-1,y+1
-
-  // x,y-1
-  // x,y
-  // x,y+1
-
-  // x+1, y-1
-  // x+1,y
-  // x+1,y+1
-
   const calcuateNearbyMines = (
     x: number,
     y: number,
@@ -66,7 +54,6 @@ export const Grid = () => {
       for (let i2 = 0; i2 < 3; i2++) {
         const xVal = x + i2 - 1
         if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
-          // console.log("value check : ", xVal, yVal, arr[xVal][yVal].mine)
           if (arr[xVal][yVal].mine == true) {
             arr[x][y].nearByMine = arr[x][y].nearByMine + 1
           }
@@ -74,6 +61,136 @@ export const Grid = () => {
       }
     }
     return false
+  }
+
+  // Allow the player to reveal tiles and mark potential mines.
+  // const girdItemClickHandler = (
+  //   x: number,
+  //   y: number,
+  //   mine: boolean,
+  //   arr: Array<Array<ItemType>>
+  // ) => {
+  //   //if click on mine, then game over
+  //   if (mine) {
+  //     setGame(false)
+  //   }
+
+  //   // unmask the ones with near by mines
+  //   console.log("Clicked on : ", x, y)
+
+  //   //make a copy of current grid arr
+  //   const tempArr = arr
+
+  //   for (let left = x; left >= 0; left--) {
+  //     for (let up = y; up >= 0; up--) {
+  //       // if (tempArr[up][left].nearByMine > 0) {
+  //       //   console.log("Found near by mine Up check", x, up)
+  //       //   tempArr[up][left].mask = false
+  //       //   break
+  //       // } else {
+  //       //   tempArr[up][left].mask = false
+  //       // }
+  //       if (tempArr[up][left].mine != true) {
+  //         tempArr[up][left].mask = false
+  //       }
+  //     }
+  //     for (let down = y + 1; down < gridSize; down++) {
+  //       // if (tempArr[down][left].nearByMine > 0) {
+  //       //   tempArr[down][left].mask = false
+  //       //   break
+  //       // } else {
+  //       //   tempArr[down][left].mask = false
+  //       // }
+  //       if (tempArr[down][left].mine != true) {
+  //         tempArr[down][left].mask = false
+  //       }
+  //     }
+  //   }
+
+  //   for (let right = x + 1; right < gridSize; right++) {
+  //     for (let up = y; up >= 0; up--) {
+  //       // if (tempArr[up][right].nearByMine > 0) {
+  //       //   console.log("Found near by mine Up check", x, up)
+  //       //   tempArr[up][right].mask = false
+  //       //   break
+  //       // } else {
+  //       //   tempArr[up][right].mask = false
+  //       // }
+  //       if (tempArr[up][right].mine != true) {
+  //         tempArr[up][right].mask = false
+  //       }
+  //     }
+  //     for (let down = y + 1; down < gridSize; down++) {
+  //       // if (tempArr[down][right].nearByMine > 0) {
+  //       //   tempArr[down][right].mask = false
+  //       //   break
+  //       // } else {
+  //       //   tempArr[down][right].mask = false
+  //       // }
+  //       if (tempArr[down][right].mine != true) {
+  //         tempArr[down][right].mask = false
+  //       }
+  //     }
+  //   }
+
+  //   setGridArr([...tempArr])
+  // }
+
+  const getNearByNodes = (x: number, y: number, arr: GridArrType) => {
+    // console.log("X , Y : ", x, y)
+    if (x < 0 || y < 0) {
+      return
+    }
+    // console.log("Mask check : ", arr[y][x])
+    // if (arr[y][x].mine == true) {
+    //   return
+    // }
+
+    // //if this one is already unmask and the one before is also already unmask then do nothing
+    // if (arr[y][x].mask == false) {
+    //   return
+    // }
+
+    for (let xIndex = 0; xIndex < 3; xIndex++) {
+      const xValue: number = x + xIndex - 1 //check left
+      for (let yIndex = 0; yIndex < 3; yIndex++) {
+        const yValue: number = y + yIndex - 1 // check down
+
+        if (
+          xValue >= 0 &&
+          xValue < gridSize &&
+          yValue >= 0 &&
+          yValue < gridSize &&
+          xValue - 1 >= 0 &&
+          yValue - 1 >= 0
+        ) {
+          if (
+            arr[yValue][xValue].mine != true &&
+            arr[yValue - 1][xValue - 1].nearByMine == 0
+          ) {
+            arr[yValue][xValue].mask = false
+          }
+        }
+
+        if (
+          xValue >= 0 &&
+          xValue < gridSize &&
+          yValue >= 0 &&
+          yValue < gridSize
+          // &&
+          // xValue - 1 >= 0 &&
+          // yValue - 1 >= 0
+        ) {
+          if (
+            arr[yValue][xValue].mine != true
+            // &&
+            // arr[yValue - 1][xValue - 1].nearByMine == 0
+          ) {
+            arr[yValue][xValue].mask = false
+          }
+        }
+      }
+    }
   }
 
   // Allow the player to reveal tiles and mark potential mines.
@@ -89,63 +206,34 @@ export const Grid = () => {
     }
 
     // unmask the ones with near by mines
-    console.log("Clicked on : ", x, y)
 
     //make a copy of current grid arr
     const tempArr = arr
 
-    for (let left = x; left >= 0; left--) {
-      for (let up = y; up >= 0; up--) {
-        // if (tempArr[up][left].nearByMine > 0) {
-        //   console.log("Found near by mine Up check", x, up)
-        //   tempArr[up][left].mask = false
-        //   break
-        // } else {
-        //   tempArr[up][left].mask = false
-        // }
-        if (tempArr[up][left].mine != true) {
-          tempArr[up][left].mask = false
-        }
-      }
-      for (let down = y + 1; down < gridSize; down++) {
-        // if (tempArr[down][left].nearByMine > 0) {
-        //   tempArr[down][left].mask = false
-        //   break
-        // } else {
-        //   tempArr[down][left].mask = false
-        // }
-        if (tempArr[down][left].mine != true) {
-          tempArr[down][left].mask = false
-        }
+    // for (let left = x; left >= 0; left--) {
+    for (let up = y; up >= 0; up--) {
+      //the current node doens't have mine
+      //the one before current node is unmasked and it has no near by mies
+      if (tempArr[up][x].nearByMine == 0) {
+        console.log("CHECKING NO near by mine", arr[up][x])
+        getNearByNodes(x, up, tempArr)
+      } else if (tempArr[up][x].mask == true && tempArr[up][x].mine == false) {
+        console.log("CHECKING ", arr[up][x])
+        getNearByNodes(x, up, tempArr)
+      } else {
+        break
       }
     }
+    // }
 
-    for (let right = x + 1; right < gridSize; right++) {
-      for (let up = y; up >= 0; up--) {
-        // if (tempArr[up][right].nearByMine > 0) {
-        //   console.log("Found near by mine Up check", x, up)
-        //   tempArr[up][right].mask = false
-        //   break
-        // } else {
-        //   tempArr[up][right].mask = false
-        // }
-        if (tempArr[up][right].mine != true) {
-          tempArr[up][right].mask = false
-        }
-      }
-      for (let down = y + 1; down < gridSize; down++) {
-        // if (tempArr[down][right].nearByMine > 0) {
-        //   tempArr[down][right].mask = false
-        //   break
-        // } else {
-        //   tempArr[down][right].mask = false
-        // }
-        if (tempArr[down][right].mine != true) {
-          tempArr[down][right].mask = false
-        }
-      }
-    }
+    //
+    // getNearByNodes(x, y, tempArr)
+    // setGridArr([...tempArr])
 
+    // getNearByNodes(x, y - 1, tempArr)
+    // setGridArr([...tempArr])
+
+    // getNearByNodes(x, y - 2, tempArr)
     setGridArr([...tempArr])
   }
 
@@ -178,7 +266,7 @@ export const Grid = () => {
     [
       { x: 0, y: 3, mine: false, nearByMine: 0, mask: true },
       { x: 1, y: 3, mine: false, nearByMine: 0, mask: true },
-      { x: 2, y: 3, mine: true, nearByMine: 0, mask: true },
+      { x: 2, y: 3, mine: false, nearByMine: 0, mask: true }, //
       { x: 3, y: 3, mine: false, nearByMine: 0, mask: true },
       { x: 4, y: 3, mine: false, nearByMine: 0, mask: true },
     ],
@@ -199,7 +287,9 @@ export const Grid = () => {
   })
 
   const [gridArr, setGridArr] = useState(arr)
-  console.log("What is grid Arr  , ", gridArr)
+  // console.log("What is grid Arr  , ", gridArr)
+  // console.log("what is row and column : ", gridArr[3][2]) //grid arr [y][x]
+  // console.log("what is row and column @@@ : ", gridArr[2][3])
 
   return (
     <div {...stylex.props(gridStyles.base)}>
@@ -223,6 +313,7 @@ export const Grid = () => {
         )
       })}
     </div>
+    // <div> TEST</div>
   )
 }
 
