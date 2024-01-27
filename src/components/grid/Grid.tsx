@@ -102,44 +102,93 @@ export const Grid = () => {
 
     //make a copy of current grid arr
     const tempArr = gridArr
-    //check X left and right on the same Y
-    for (let left = x - 1; left >= 0; left--) {
-      if (tempArr[y][left].nearByMine > 0) {
-        console.log("Found near by mine left check", left, y)
-        tempArr[y][left].mask = false
-        return
-        // update state
-        // const newArr = gridArr
-        // console.log("New Arr: ", newArr)
-        // newArr[y][left].mask = false
-        // console.log("New Arr with mark update: ", newArr)
 
-        // return setGridArr([...newArr])
-      } else {
-        tempArr[y][left].mask = false
+    for (let left = x; left >= 0; left--) {
+      // if (tempArr[y][left].nearByMine > 0) {
+      //   console.log("Found near by mine left check", left, y)
+      //   tempArr[y][left].mask = false
+      //   break
+      // } else {
+      //   tempArr[y][left].mask = false
+      // }
+
+      for (let up = y; up >= 0; up--) {
+        if (tempArr[up][left].nearByMine > 0) {
+          console.log("Found near by mine Up check", x, up)
+          tempArr[up][left].mask = false
+          break
+        } else {
+          tempArr[up][left].mask = false
+        }
+      }
+      for (let down = y + 1; down < gridSize; down++) {
+        if (tempArr[down][left].nearByMine > 0) {
+          tempArr[down][left].mask = false
+          break
+        } else {
+          tempArr[down][left].mask = false
+        }
       }
     }
+
     for (let right = x + 1; right < gridSize; right++) {
-      if (tempArr[y][right].nearByMine > 0) {
-        tempArr[y][right].mask = false
-        return
-      } else {
-        tempArr[y][right].mask = false
+      // if (tempArr[y][right].nearByMine > 0) {
+      //   tempArr[y][right].mask = false
+      //   break
+      // } else {
+      //   tempArr[y][right].mask = false
+      // }
+
+      for (let up = y; up >= 0; up--) {
+        if (tempArr[up][right].nearByMine > 0) {
+          console.log("Found near by mine Up check", x, up)
+          tempArr[up][right].mask = false
+          break
+        } else {
+          tempArr[up][right].mask = false
+        }
+      }
+      for (let down = y + 1; down < gridSize; down++) {
+        if (tempArr[down][right].nearByMine > 0) {
+          tempArr[down][right].mask = false
+          break
+        } else {
+          tempArr[down][right].mask = false
+        }
       }
     }
+
+    // for (let up = y - 1; up >= 0; up--) {
+    //   if (tempArr[up][x].nearByMine > 0) {
+    //     console.log("Found near by mine Up check", x, up)
+    //     tempArr[up][x].mask = false
+    //     break
+    //   } else {
+    //     tempArr[up][x].mask = false
+    //   }
+    // }
+
+    // for (let down = y + 1; down < gridSize; down++) {
+    //   if (tempArr[down][x].nearByMine > 0) {
+    //     tempArr[down][x].mask = false
+    //     break
+    //   } else {
+    //     tempArr[down][x].mask = false
+    //   }
+    // }
 
     // const newArr = gridArr
     // console.log("New Arr: ", newArr)
     // newArr[y][left].mask = false
     // console.log("New Arr with mark update: ", newArr)
 
-    return setGridArr([...tempArr])
+    setGridArr([...tempArr])
   }
 
-  const gridSize = 3
+  const gridSize = 10
   const arr = generateArrayOfArr(gridSize)
   // console.log("What is arr: ", arr)
-  randomlyChangeMines(arr, 1)
+  randomlyChangeMines(arr, 5)
   arr.map((xArr) => {
     xArr.map((item: ItemType) => {
       calcuateNearbyMines(item.x, item.y, arr)
