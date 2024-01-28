@@ -216,8 +216,8 @@ export const Grid = () => {
   // })
 
   const [gridArr, setGridArr] = useState([])
-  const gridSize = 5
-  const mineSize = 1
+  const gridSize = 10
+  const mineSize = 5
 
   const startNewGame = () => {
     // const gridSize = 5
