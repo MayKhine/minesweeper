@@ -1,13 +1,15 @@
 import * as stylex from "@stylexjs/stylex"
 
 import { GridItem, ItemType } from "./GridItem"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { PopUpModal } from "../UI/PopUpModal"
 
 export type GridArrType = Array<Array<ItemType>>
 export const Grid = () => {
   const [game, setGame] = useState("on")
+  const [startNew, setStartNew] = useState(false)
   const [revealNodesCount, setRevealNodesCount] = useState(0)
-  // const [revealNum, setRevealNum] = useState(0)
+
   const generateArrayOfArr = (num: number) => {
     const arr = []
     for (let i = 0; i < num; i++) {
@@ -120,24 +122,21 @@ export const Grid = () => {
     return result
   }
 
-  const checkWinState = () => {
-    // if (revealNum + mineSize == gridSize) {
-    //   setGame("win")
-    // }
-  }
-
   const girdItemClickHandler = (
     x: number,
     y: number,
     mine: boolean,
     arr: Array<Array<ItemType>>
   ) => {
+    const tempArr = arr
+
     if (mine) {
       setGame("over")
+      tempArr[y][x].mask = false
+      // return
       return
     }
 
-    const tempArr = arr
     //create a queue to visit
     const queueToVist = []
     queueToVist.push({ y, x })
@@ -153,7 +152,7 @@ export const Grid = () => {
         // Action to be performed immediately after state update
         // console.log("State updated. New count:", newCount)
         if (newCount + mineSize == gridSize * gridSize) {
-          console.log("new count: ", newCount, mineSize, gridSize)
+          // console.log("new count: ", newCount, mineSize, gridSize)
           setGame("win")
           setRevealNodesCount(0)
         }
@@ -206,9 +205,34 @@ export const Grid = () => {
     setGridArr([...tempArr])
   }
 
+  // const gridSize = 5
+  // const mineSize = 1
+  // const arr = generateArrayOfArr(gridSize)
+  // randomlyChangeMines(arr, mineSize)
+  // arr.map((xArr) => {
+  //   xArr.map((item: ItemType) => {
+  //     calcuateNearbyMines(item.x, item.y, arr)
+  //   })
+  // })
+
+  const [gridArr, setGridArr] = useState([])
   const gridSize = 5
   const mineSize = 1
-  const arr = generateArrayOfArr(gridSize)
+
+  const startNewGame = () => {
+    // const gridSize = 5
+    // const mineSize = 1
+    const arr = generateArrayOfArr(gridSize)
+    randomlyChangeMines(arr, mineSize)
+    arr.map((xArr) => {
+      xArr.map((item: ItemType) => {
+        calcuateNearbyMines(item.x, item.y, arr)
+      })
+    })
+
+    setGridArr([...arr])
+  }
+  // const [gridArr, setGridArr] = useState(arr)
 
   // const arr = [
   //   [
@@ -248,16 +272,12 @@ export const Grid = () => {
   //   ],
   // ]
 
-  randomlyChangeMines(arr, mineSize)
-  arr.map((xArr) => {
-    xArr.map((item: ItemType) => {
-      calcuateNearbyMines(item.x, item.y, arr)
-    })
-  })
-
-  const [gridArr, setGridArr] = useState(arr)
   // checkWinState()
   // console.log("Game state: ", game)
+
+  useEffect(() => {
+    startNewGame()
+  }, [startNew])
   return (
     <div
       {...stylex.props(gridStyles.base)}
@@ -265,10 +285,30 @@ export const Grid = () => {
         e.preventDefault()
       }}
     >
-      {game == "over" && <div>Game Over</div>}
-      {game == "win" && <div>WINNNN</div>}
-
-      {/* {arr.map((eachArr, key) => { */}
+      {game == "over" && (
+        <PopUpModal
+          text="OVER TEXT"
+          gameStatus={game}
+          tryAgain={() => {
+            setStartNew(!startNew)
+          }}
+          removePopUp={() => {
+            setGame("on")
+          }}
+        />
+      )}
+      {game == "win" && (
+        <PopUpModal
+          text="WIN TEXT"
+          gameStatus={game}
+          tryAgain={() => {
+            setStartNew(!startNew)
+          }}
+          removePopUp={() => {
+            setGame("on")
+          }}
+        />
+      )}
       {gridArr.map((eachArr, key) => {
         return (
           <div {...stylex.props(gridStyles.xArr)} key={key}>
