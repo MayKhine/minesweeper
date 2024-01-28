@@ -134,6 +134,7 @@ export const Grid = () => {
   ) => {
     if (mine) {
       setGame("over")
+      return
     }
 
     const tempArr = arr
@@ -150,7 +151,7 @@ export const Grid = () => {
       setRevealNodesCount((prevCount) => {
         const newCount = prevCount + 1
         // Action to be performed immediately after state update
-        console.log("State updated. New count:", newCount)
+        // console.log("State updated. New count:", newCount)
         if (newCount + mineSize == gridSize * gridSize) {
           console.log("new count: ", newCount, mineSize, gridSize)
           setGame("win")
@@ -280,6 +281,7 @@ export const Grid = () => {
                   girdItemClickHandler={girdItemClickHandler}
                   arr={gridArr}
                   toggleFlag={toggleFlag}
+                  game={game}
                 />
               )
             })}

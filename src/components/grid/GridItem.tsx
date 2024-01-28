@@ -21,6 +21,7 @@ export type GridItemProps = {
   ) => void
   arr: Array<Array<ItemType>>
   toggleFlag: (x: number, y: number, arr: Array<Array<ItemType>>) => void
+  game: string
 }
 
 export const GridItem = ({
@@ -29,6 +30,7 @@ export const GridItem = ({
   girdItemClickHandler,
   arr,
   toggleFlag,
+  game,
 }: GridItemProps) => {
   return (
     <div
@@ -37,14 +39,14 @@ export const GridItem = ({
         gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
-        if (item.flag || item.mask == false) {
+        if (item.flag || item.mask == false || game != "on") {
           return
         }
 
         girdItemClickHandler(item.x, item.y, item.mine, arr)
       }}
       onAuxClick={(e) => {
-        if (e.button == 2) {
+        if (e.button == 2 && item.mask == true && game == "on") {
           // console.log(" TUN ON FLAGGG")
           toggleFlag(item.x, item.y, arr)
         }
