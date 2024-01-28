@@ -18,6 +18,7 @@ export const Grid = () => {
           mine: false,
           nearByMine: 0,
           mask: true,
+          queue: false,
         }
         arr[i].push(item)
       }
@@ -63,134 +64,100 @@ export const Grid = () => {
     return false
   }
 
-  // Allow the player to reveal tiles and mark potential mines.
-  // const girdItemClickHandler = (
-  //   x: number,
-  //   y: number,
-  //   mine: boolean,
-  //   arr: Array<Array<ItemType>>
-  // ) => {
-  //   //if click on mine, then game over
-  //   if (mine) {
-  //     setGame(false)
+  // const getNearByNodes = (x: number, y: number, arr: GridArrType) => {
+  //   console.log("CHECKING NEAR BY NODES OF X , Y : ", x, y)
+  //   if (x < 0 || y < 0) {
+  //     return
   //   }
 
-  //   // unmask the ones with near by mines
-  //   console.log("Clicked on : ", x, y)
+  //   for (let xIndex = 0; xIndex < 3; xIndex++) {
+  //     const xValue: number = x + xIndex - 1 //check left
+  //     for (let yIndex = 0; yIndex < 3; yIndex++) {
+  //       const yValue: number = y + yIndex - 1 // check down
 
-  //   //make a copy of current grid arr
-  //   const tempArr = arr
-
-  //   for (let left = x; left >= 0; left--) {
-  //     for (let up = y; up >= 0; up--) {
-  //       // if (tempArr[up][left].nearByMine > 0) {
-  //       //   console.log("Found near by mine Up check", x, up)
-  //       //   tempArr[up][left].mask = false
-  //       //   break
-  //       // } else {
-  //       //   tempArr[up][left].mask = false
-  //       // }
-  //       if (tempArr[up][left].mine != true) {
-  //         tempArr[up][left].mask = false
+  //       if (
+  //         xValue >= 0 &&
+  //         xValue < gridSize &&
+  //         yValue >= 0 &&
+  //         yValue < gridSize &&
+  //         xValue - 1 >= 0 &&
+  //         yValue - 1 >= 0
+  //       ) {
+  //         if (
+  //           arr[yValue][xValue].mine != true &&
+  //           arr[yValue - 1][xValue - 1].nearByMine == 0
+  //         ) {
+  //           arr[yValue][xValue].mask = false
+  //         }
   //       }
-  //     }
-  //     for (let down = y + 1; down < gridSize; down++) {
-  //       // if (tempArr[down][left].nearByMine > 0) {
-  //       //   tempArr[down][left].mask = false
-  //       //   break
-  //       // } else {
-  //       //   tempArr[down][left].mask = false
-  //       // }
-  //       if (tempArr[down][left].mine != true) {
-  //         tempArr[down][left].mask = false
+
+  //       if (
+  //         xValue >= 0 &&
+  //         xValue < gridSize &&
+  //         yValue >= 0 &&
+  //         yValue < gridSize
+  //       ) {
+  //         if (arr[yValue][xValue].mine != true) {
+  //           arr[yValue][xValue].mask = false
+  //         }
   //       }
   //     }
   //   }
-
-  //   for (let right = x + 1; right < gridSize; right++) {
-  //     for (let up = y; up >= 0; up--) {
-  //       // if (tempArr[up][right].nearByMine > 0) {
-  //       //   console.log("Found near by mine Up check", x, up)
-  //       //   tempArr[up][right].mask = false
-  //       //   break
-  //       // } else {
-  //       //   tempArr[up][right].mask = false
-  //       // }
-  //       if (tempArr[up][right].mine != true) {
-  //         tempArr[up][right].mask = false
-  //       }
-  //     }
-  //     for (let down = y + 1; down < gridSize; down++) {
-  //       // if (tempArr[down][right].nearByMine > 0) {
-  //       //   tempArr[down][right].mask = false
-  //       //   break
-  //       // } else {
-  //       //   tempArr[down][right].mask = false
-  //       // }
-  //       if (tempArr[down][right].mine != true) {
-  //         tempArr[down][right].mask = false
-  //       }
-  //     }
-  //   }
-
-  //   setGridArr([...tempArr])
   // }
 
-  const getNearByNodes = (x: number, y: number, arr: GridArrType) => {
-    // console.log("X , Y : ", x, y)
-    if (x < 0 || y < 0) {
-      return
+  const getNeighbourNodes = (x: number, y: number) => {
+    const result = []
+    //x
+    if (x - 1 >= 0) {
+      const tempX = x - 1
+      result.push({ y, x: tempX })
     }
-    // console.log("Mask check : ", arr[y][x])
-    // if (arr[y][x].mine == true) {
-    //   return
-    // }
-
-    // //if this one is already unmask and the one before is also already unmask then do nothing
-    // if (arr[y][x].mask == false) {
-    //   return
-    // }
-
-    for (let xIndex = 0; xIndex < 3; xIndex++) {
-      const xValue: number = x + xIndex - 1 //check left
-      for (let yIndex = 0; yIndex < 3; yIndex++) {
-        const yValue: number = y + yIndex - 1 // check down
-
-        if (
-          xValue >= 0 &&
-          xValue < gridSize &&
-          yValue >= 0 &&
-          yValue < gridSize &&
-          xValue - 1 >= 0 &&
-          yValue - 1 >= 0
-        ) {
-          if (
-            arr[yValue][xValue].mine != true &&
-            arr[yValue - 1][xValue - 1].nearByMine == 0
-          ) {
-            arr[yValue][xValue].mask = false
-          }
-        }
-
-        if (
-          xValue >= 0 &&
-          xValue < gridSize &&
-          yValue >= 0 &&
-          yValue < gridSize
-          // &&
-          // xValue - 1 >= 0 &&
-          // yValue - 1 >= 0
-        ) {
-          if (
-            arr[yValue][xValue].mine != true
-            // &&
-            // arr[yValue - 1][xValue - 1].nearByMine == 0
-          ) {
-            arr[yValue][xValue].mask = false
-          }
-        }
-      }
+    if (x + 1 < gridSize) {
+      const tempX = x + 1
+      result.push({ y, x: tempX })
     }
+
+    //y
+    if (y - 1 >= 0) {
+      const tempY = y - 1
+      result.push({ y: tempY, x })
+    }
+
+    if (y + 1 < gridSize) {
+      const tempY = y + 1
+      result.push({ y: tempY, x })
+    }
+
+    //left Top dia
+    if (x - 1 >= 0 && y - 1 >= 0) {
+      const tempX = x - 1
+      const tempY = y - 1
+      result.push({ y: tempY, x: tempX })
+    }
+
+    //left bottom
+    if (x - 1 >= 0 && y + 1 < gridSize) {
+      const tempX = x - 1
+      const tempY = y + 1
+      result.push({ y: tempY, x: tempX })
+    }
+
+    //right Top dia
+    if (x + 1 < gridSize && y - 1 >= 0) {
+      const tempX = x + 1
+      const tempY = y - 1
+      result.push({ y: tempY, x: tempX })
+    }
+
+    //left bottom
+    if (x + 1 < gridSize && y + 1 < gridSize) {
+      const tempX = x + 1
+      const tempY = y + 1
+      result.push({ y: tempY, x: tempX })
+    }
+
+    // console.log("what is current x y : ", x, y)
+    return result
   }
 
   // Allow the player to reveal tiles and mark potential mines.
@@ -200,86 +167,99 @@ export const Grid = () => {
     mine: boolean,
     arr: Array<Array<ItemType>>
   ) => {
-    //if click on mine, then game over
     if (mine) {
       setGame(false)
     }
 
-    // unmask the ones with near by mines
-
-    //make a copy of current grid arr
     const tempArr = arr
+    //create a queue to visit
+    const queueToVist = []
+    queueToVist.push({ y, x })
+    tempArr[y][x].queue = true
 
-    // for (let left = x; left >= 0; left--) {
-    for (let up = y; up >= 0; up--) {
-      //the current node doens't have mine
-      //the one before current node is unmasked and it has no near by mies
-      if (tempArr[up][x].nearByMine == 0) {
-        console.log("CHECKING NO near by mine", arr[up][x])
-        getNearByNodes(x, up, tempArr)
-      } else if (tempArr[up][x].mask == true && tempArr[up][x].mine == false) {
-        console.log("CHECKING ", arr[up][x])
-        getNearByNodes(x, up, tempArr)
-      } else {
-        break
+    while (queueToVist.length > 0) {
+      const currentNode = queueToVist.pop()
+
+      if (currentNode) {
+        tempArr[currentNode.y][currentNode.x].mask = false
+        if (tempArr[currentNode.y][currentNode.x].nearByMine == 0) {
+          ///get neighbournodes of current node into queue
+          const curNodeNeighbourArr = getNeighbourNodes(
+            currentNode.x,
+            currentNode.y
+          )
+
+          for (let i = 0; i < curNodeNeighbourArr.length; i++) {
+            const tempY = curNodeNeighbourArr[i].y
+            const tempX = curNodeNeighbourArr[i].x
+            console.log("CURRENT NODE: ", currentNode)
+            console.log("NEIGHT BOUR CEHCK : ", tempArr[tempY][tempX])
+            if (
+              tempArr[tempY][tempX].mine == false &&
+              tempArr[tempY][tempX].mask == true &&
+              tempArr[tempY][tempX].queue == false
+            ) {
+              console.log("ADDED This nighbour to Queue ")
+              //add add it to queue
+              queueToVist.push({ y: tempY, x: tempX })
+              //update the queue check
+              tempArr[tempY][tempX].queue = true
+            } else {
+              console.log("NOT ADDED")
+              continue
+            }
+          }
+        }
+        // console.log("what is the current neightbours", queueToVist)
       }
     }
-    // }
 
-    //
-    // getNearByNodes(x, y, tempArr)
-    // setGridArr([...tempArr])
-
-    // getNearByNodes(x, y - 1, tempArr)
-    // setGridArr([...tempArr])
-
-    // getNearByNodes(x, y - 2, tempArr)
     setGridArr([...tempArr])
   }
 
-  // const gridSize = 10
-  const gridSize = 5
-  // const arr = generateArrayOfArr(gridSize)
+  const gridSize = 10
+  const mineSize = 10
+  const arr = generateArrayOfArr(gridSize)
 
-  const arr = [
-    [
-      { x: 0, y: 0, mine: false, nearByMine: 0, mask: true },
-      { x: 1, y: 0, mine: false, nearByMine: 0, mask: true },
-      { x: 2, y: 0, mine: false, nearByMine: 0, mask: true },
-      { x: 3, y: 0, mine: false, nearByMine: 0, mask: true },
-      { x: 4, y: 0, mine: false, nearByMine: 0, mask: true },
-    ],
-    [
-      { x: 0, y: 1, mine: false, nearByMine: 0, mask: true },
-      { x: 1, y: 1, mine: true, nearByMine: 0, mask: true },
-      { x: 2, y: 1, mine: false, nearByMine: 0, mask: true },
-      { x: 3, y: 1, mine: false, nearByMine: 0, mask: true },
-      { x: 4, y: 1, mine: false, nearByMine: 0, mask: true },
-    ],
-    [
-      { x: 0, y: 2, mine: false, nearByMine: 0, mask: true },
-      { x: 1, y: 2, mine: false, nearByMine: 0, mask: true },
-      { x: 2, y: 2, mine: false, nearByMine: 0, mask: true },
-      { x: 3, y: 2, mine: true, nearByMine: 0, mask: true },
-      { x: 4, y: 2, mine: false, nearByMine: 0, mask: true },
-    ],
-    [
-      { x: 0, y: 3, mine: false, nearByMine: 0, mask: true },
-      { x: 1, y: 3, mine: false, nearByMine: 0, mask: true },
-      { x: 2, y: 3, mine: false, nearByMine: 0, mask: true }, //
-      { x: 3, y: 3, mine: false, nearByMine: 0, mask: true },
-      { x: 4, y: 3, mine: false, nearByMine: 0, mask: true },
-    ],
-    [
-      { x: 0, y: 4, mine: false, nearByMine: 0, mask: true },
-      { x: 1, y: 4, mine: false, nearByMine: 0, mask: true },
-      { x: 2, y: 4, mine: false, nearByMine: 0, mask: true },
-      { x: 3, y: 4, mine: false, nearByMine: 0, mask: true },
-      { x: 4, y: 4, mine: false, nearByMine: 0, mask: true },
-    ],
-  ]
+  // const arr = [
+  //   [
+  //     { x: 0, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 1, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 2, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 3, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 4, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
+  //   ],
+  //   [
+  //     { x: 0, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 1, y: 1, mine: true, nearByMine: 0, mask: true, queue: false },
+  //     { x: 2, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 3, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 4, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
+  //   ],
+  //   [
+  //     { x: 0, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 1, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 2, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 3, y: 2, mine: true, nearByMine: 0, mask: true, queue: false },
+  //     { x: 4, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
+  //   ],
+  //   [
+  //     { x: 0, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 1, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 2, y: 3, mine: false, nearByMine: 0, mask: true, queue: false }, //
+  //     { x: 3, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 4, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
+  //   ],
+  //   [
+  //     { x: 0, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 1, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 2, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 3, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
+  //     { x: 4, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
+  //   ],
+  // ]
 
-  // randomlyChangeMines(arr, 10)
+  randomlyChangeMines(arr, mineSize)
   arr.map((xArr) => {
     xArr.map((item: ItemType) => {
       calcuateNearbyMines(item.x, item.y, arr)
@@ -287,9 +267,6 @@ export const Grid = () => {
   })
 
   const [gridArr, setGridArr] = useState(arr)
-  // console.log("What is grid Arr  , ", gridArr)
-  // console.log("what is row and column : ", gridArr[3][2]) //grid arr [y][x]
-  // console.log("what is row and column @@@ : ", gridArr[2][3])
 
   return (
     <div {...stylex.props(gridStyles.base)}>
