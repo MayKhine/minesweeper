@@ -37,7 +37,7 @@ export const GridItem = ({
         gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
-        if (item.flag) {
+        if (item.flag || item.mask == false) {
           return
         }
 

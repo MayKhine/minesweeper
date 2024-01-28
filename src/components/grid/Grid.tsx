@@ -6,7 +6,8 @@ import { useState } from "react"
 export type GridArrType = Array<Array<ItemType>>
 export const Grid = () => {
   const [game, setGame] = useState("on")
-
+  const [revealNodesCount, setRevealNodesCount] = useState(0)
+  // const [revealNum, setRevealNum] = useState(0)
   const generateArrayOfArr = (num: number) => {
     const arr = []
     for (let i = 0; i < num; i++) {
@@ -119,6 +120,12 @@ export const Grid = () => {
     return result
   }
 
+  const checkWinState = () => {
+    // if (revealNum + mineSize == gridSize) {
+    //   setGame("win")
+    // }
+  }
+
   const girdItemClickHandler = (
     x: number,
     y: number,
@@ -137,6 +144,20 @@ export const Grid = () => {
 
     while (queueToVist.length > 0) {
       const currentNode = queueToVist.pop()
+      // setRevealNum(revealNum + 1)
+      // const tempRevealNodesCount = revealNodesCount + 1
+      // setRevealNodesCount((revealNodesCount) => revealNodesCount + 1)
+      setRevealNodesCount((prevCount) => {
+        const newCount = prevCount + 1
+        // Action to be performed immediately after state update
+        console.log("State updated. New count:", newCount)
+        if (newCount + mineSize == gridSize * gridSize) {
+          console.log("new count: ", newCount, mineSize, gridSize)
+          setGame("win")
+          setRevealNodesCount(0)
+        }
+        return newCount
+      })
 
       if (currentNode) {
         tempArr[currentNode.y][currentNode.x].mask = false
@@ -150,20 +171,20 @@ export const Grid = () => {
           for (let i = 0; i < curNodeNeighbourArr.length; i++) {
             const tempY = curNodeNeighbourArr[i].y
             const tempX = curNodeNeighbourArr[i].x
-            console.log("CURRENT NODE: ", currentNode)
-            console.log("NEIGHT BOUR CEHCK : ", tempArr[tempY][tempX])
+            // console.log("CURRENT NODE: ", currentNode)
+            // console.log("NEIGHT BOUR CEHCK : ", tempArr[tempY][tempX])
             if (
               tempArr[tempY][tempX].mine == false &&
               tempArr[tempY][tempX].mask == true &&
               tempArr[tempY][tempX].queue == false
             ) {
-              console.log("ADDED This nighbour to Queue ")
+              // console.log("ADDED This nighbour to Queue ")
               //add add it to queue
               queueToVist.push({ y: tempY, x: tempX })
               //update the queue check
               tempArr[tempY][tempX].queue = true
             } else {
-              console.log("NOT ADDED")
+              // console.log("NOT ADDED")
               continue
             }
           }
@@ -173,17 +194,19 @@ export const Grid = () => {
     }
 
     setGridArr([...tempArr])
+    // checkWinState()
+    // checkWinState()
   }
 
   const toggleFlag = (x: number, y: number, arr: GridArrType) => {
     const tempArr = arr
-    tempArr[y][x].flag = true
+    tempArr[y][x].flag = !tempArr[y][x].flag
 
     setGridArr([...tempArr])
   }
 
-  const gridSize = 10
-  const mineSize = 10
+  const gridSize = 5
+  const mineSize = 1
   const arr = generateArrayOfArr(gridSize)
 
   // const arr = [
@@ -232,6 +255,8 @@ export const Grid = () => {
   })
 
   const [gridArr, setGridArr] = useState(arr)
+  // checkWinState()
+  // console.log("Game state: ", game)
   return (
     <div
       {...stylex.props(gridStyles.base)}
@@ -240,6 +265,8 @@ export const Grid = () => {
       }}
     >
       {game == "over" && <div>Game Over</div>}
+      {game == "win" && <div>WINNNN</div>}
+
       {/* {arr.map((eachArr, key) => { */}
       {gridArr.map((eachArr, key) => {
         return (
