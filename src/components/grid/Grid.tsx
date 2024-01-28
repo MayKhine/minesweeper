@@ -5,7 +5,7 @@ import { useState } from "react"
 
 export type GridArrType = Array<Array<ItemType>>
 export const Grid = () => {
-  const [game, setGame] = useState(true)
+  const [game, setGame] = useState("on")
 
   const generateArrayOfArr = (num: number) => {
     const arr = []
@@ -64,47 +64,6 @@ export const Grid = () => {
     return false
   }
 
-  // const getNearByNodes = (x: number, y: number, arr: GridArrType) => {
-  //   console.log("CHECKING NEAR BY NODES OF X , Y : ", x, y)
-  //   if (x < 0 || y < 0) {
-  //     return
-  //   }
-
-  //   for (let xIndex = 0; xIndex < 3; xIndex++) {
-  //     const xValue: number = x + xIndex - 1 //check left
-  //     for (let yIndex = 0; yIndex < 3; yIndex++) {
-  //       const yValue: number = y + yIndex - 1 // check down
-
-  //       if (
-  //         xValue >= 0 &&
-  //         xValue < gridSize &&
-  //         yValue >= 0 &&
-  //         yValue < gridSize &&
-  //         xValue - 1 >= 0 &&
-  //         yValue - 1 >= 0
-  //       ) {
-  //         if (
-  //           arr[yValue][xValue].mine != true &&
-  //           arr[yValue - 1][xValue - 1].nearByMine == 0
-  //         ) {
-  //           arr[yValue][xValue].mask = false
-  //         }
-  //       }
-
-  //       if (
-  //         xValue >= 0 &&
-  //         xValue < gridSize &&
-  //         yValue >= 0 &&
-  //         yValue < gridSize
-  //       ) {
-  //         if (arr[yValue][xValue].mine != true) {
-  //           arr[yValue][xValue].mask = false
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   const getNeighbourNodes = (x: number, y: number) => {
     const result = []
     //x
@@ -160,7 +119,6 @@ export const Grid = () => {
     return result
   }
 
-  // Allow the player to reveal tiles and mark potential mines.
   const girdItemClickHandler = (
     x: number,
     y: number,
@@ -168,7 +126,7 @@ export const Grid = () => {
     arr: Array<Array<ItemType>>
   ) => {
     if (mine) {
-      setGame(false)
+      setGame("over")
     }
 
     const tempArr = arr
@@ -213,6 +171,13 @@ export const Grid = () => {
         // console.log("what is the current neightbours", queueToVist)
       }
     }
+
+    setGridArr([...tempArr])
+  }
+
+  const toggleFlag = (x: number, y: number, arr: GridArrType) => {
+    const tempArr = arr
+    tempArr[y][x].flag = true
 
     setGridArr([...tempArr])
   }
@@ -267,10 +232,14 @@ export const Grid = () => {
   })
 
   const [gridArr, setGridArr] = useState(arr)
-
   return (
-    <div {...stylex.props(gridStyles.base)}>
-      {!game && <div>Game Over</div>}
+    <div
+      {...stylex.props(gridStyles.base)}
+      onContextMenu={(e) => {
+        e.preventDefault()
+      }}
+    >
+      {game == "over" && <div>Game Over</div>}
       {/* {arr.map((eachArr, key) => { */}
       {gridArr.map((eachArr, key) => {
         return (
@@ -283,6 +252,7 @@ export const Grid = () => {
                   key={key}
                   girdItemClickHandler={girdItemClickHandler}
                   arr={gridArr}
+                  toggleFlag={toggleFlag}
                 />
               )
             })}

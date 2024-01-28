@@ -7,6 +7,7 @@ export type ItemType = {
   nearByMine: number
   mask: boolean
   queue: boolean
+  flag: boolean
 }
 
 export type GridItemProps = {
@@ -19,6 +20,7 @@ export type GridItemProps = {
     arr: Array<Array<ItemType>>
   ) => void
   arr: Array<Array<ItemType>>
+  toggleFlag: (x: number, y: number, arr: Array<Array<ItemType>>) => void
 }
 
 export const GridItem = ({
@@ -26,6 +28,7 @@ export const GridItem = ({
   // gameOver,
   girdItemClickHandler,
   arr,
+  toggleFlag,
 }: GridItemProps) => {
   return (
     <div
@@ -34,11 +37,25 @@ export const GridItem = ({
         gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
-        console.log("My mask: ", item.mask)
+        if (item.flag) {
+          return
+        }
+
         girdItemClickHandler(item.x, item.y, item.mine, arr)
       }}
+      onAuxClick={(e) => {
+        if (e.button == 2) {
+          // console.log(" TUN ON FLAGGG")
+          toggleFlag(item.x, item.y, arr)
+        }
+      }}
     >
-      {item.nearByMine > 0 && item.mask == false && <p>{item.nearByMine}</p>}
+      {item.flag && item.mask && <p> FLAG</p>}
+      {!item.flag && item.nearByMine > 0 && item.mask == false && (
+        <p>{item.nearByMine}</p>
+      )}
+
+      {/* <p>{item.mine}</p> */}
     </div>
   )
 }

@@ -30,8 +30,9 @@ Create a Minesweeper game where the player uncovers tiles on a grid, trying to a
 - Y: Create a component to generate the Minesweeper grid.
 - Y: Implement logic for placing mines randomly on the grid.
 - Y : Calculate and display numbers on tiles indicating nearby mines.
-- ?? : Allow the player to reveal tiles and mark potential mines.
-- Implement game logic for uncovering tiles and determining game outcomes.
+- Y : Allow the player to reveal tiles and mark potential mines.
+- : Remove left click on node , then
+- ? : Implement game logic for uncovering tiles and determining game outcomes.
 - Track and display the player's score and time.
 - Display a congratulations or game over screen.
 - Allow the player to start a new game.
