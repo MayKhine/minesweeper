@@ -8,6 +8,7 @@ export type GameProps = {
 type GameType = {
   win: number
   lost: number
+  // time: number
 }
 
 export const Game = ({ games, setGames }: GameProps) => {
@@ -25,7 +26,6 @@ export const Game = ({ games, setGames }: GameProps) => {
         Add
       </button>
       <div>
-        {" "}
         {games.win} {games.lost}
       </div>
     </div>

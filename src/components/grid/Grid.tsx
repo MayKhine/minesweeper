@@ -122,6 +122,17 @@ export const Grid = () => {
     return result
   }
 
+  const showAllBombs = (arr: Array<Array<ItemType>>) => {
+    for (let i = 0; i < arr.length; i++) {
+      for (let x = 0; x < arr[i].length; x++) {
+        // console.log("What is this: ", arr[i][x])
+        if (arr[i][x].mine) {
+          arr[i][x].mask = false
+        }
+      }
+    }
+  }
+
   const girdItemClickHandler = (
     x: number,
     y: number,
@@ -131,9 +142,9 @@ export const Grid = () => {
     const tempArr = arr
 
     if (mine) {
+      // tempArr[y][x].mask = false
+      showAllBombs(arr)
       setGame("over")
-      tempArr[y][x].mask = false
-      // return
       return
     }
 

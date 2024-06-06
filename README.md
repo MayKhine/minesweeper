@@ -31,11 +31,15 @@ Create a Minesweeper game where the player uncovers tiles on a grid, trying to a
 - Y: Implement logic for placing mines randomly on the grid.
 - Y : Calculate and display numbers on tiles indicating nearby mines.
 - Y : Allow the player to reveal tiles and mark potential mines.
-- : Remove left click on node , then
+- Y: Remove left click on node , then
 - Y ?? : Implement game logic for uncovering tiles and determining game outcomes.
 - Track and display the player's time.
 - Y: Display a congratulations or game over screen.
 - Y: Allow the player to start a new game.
+
+To Do
+
+- Y: when the user clicks on the bomb, show all the bombs before showing gameover
 
 Notes: sometimes win shows up too early??
 
