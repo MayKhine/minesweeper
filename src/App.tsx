@@ -1,10 +1,15 @@
 import { Grid } from "./components/grid/Grid"
 import { useState } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { ClearPopUpModel } from "./components/UI/ClearPopUpModel"
 function App() {
   const [games, setGames] = useState({ win: 0, lost: 0 })
   const [gameSize, setGameSize] = useState("small")
   const [gameDifficulty, setGameDifficulty] = useState("easy")
+  const [dropDownMenuGameSize, setDropDownMenuGameSize] = useState(false)
+  const [dropDownMenuGameDifficulty, setDropDownMenuGameDifficulty] =
+    useState(false)
+
   const win = () => {
     setGames((prevGames) => ({
       ...prevGames,
@@ -64,73 +69,100 @@ function App() {
           <div>
             Game Win: {games.win} , Game Lost: {games.lost}
           </div>
-          <div>
-            <form>
-              <label>
-                <input
-                  type="radio"
-                  name="gameSize"
-                  value="small"
-                  checked={gameSize === "small"}
-                  onChange={handleGameSizeSelection}
-                />
-                Small
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gameSize"
-                  value="medium"
-                  checked={gameSize === "medium"}
-                  onChange={handleGameSizeSelection}
-                />
-                Medium
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gameSize"
-                  value="large"
-                  checked={gameSize === "large"}
-                  onChange={handleGameSizeSelection}
-                />
-                Large
-              </label>
-            </form>
-          </div>
-          <div>
-            <form>
-              <label>
-                <input
-                  type="radio"
-                  name="gameDifficulty"
-                  value="easy"
-                  checked={gameDifficulty === "easy"}
-                  onChange={handleGameDifficultySelection}
-                />
-                Easy
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gameDifficulty"
-                  value="medium"
-                  checked={gameDifficulty === "medium"}
-                  onChange={handleGameDifficultySelection}
-                />
-                Medium
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gameDifficulty"
-                  value="difficult"
-                  checked={gameDifficulty === "difficult"}
-                  onChange={handleGameDifficultySelection}
-                />
-                Difficulty
-              </label>
-            </form>
+
+          <div {...stylex.props(styles.gameDropDownMenuContainer)}>
+            <div>
+              <div>Game Size</div>
+              <div
+                {...stylex.props(styles.selection)}
+                onClick={() => {
+                  setDropDownMenuGameSize(true)
+                }}
+              >
+                {gameSize}
+              </div>
+              {dropDownMenuGameSize && (
+                <div>
+                  <ClearPopUpModel
+                    closePopUp={() => {
+                      setDropDownMenuGameSize(false)
+                    }}
+                  />
+                  <div {...stylex.props(styles.dropDownMenu)}>
+                    <div
+                      onClick={() => {
+                        setGameSize("small")
+                        setDropDownMenuGameSize(false)
+                      }}
+                    >
+                      small
+                    </div>
+                    <div
+                      onClick={() => {
+                        setGameSize("medium")
+                        setDropDownMenuGameSize(false)
+                      }}
+                    >
+                      med
+                    </div>
+                    <div
+                      onClick={() => {
+                        setGameSize("large")
+                        setDropDownMenuGameSize(false)
+                      }}
+                    >
+                      large
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div>
+              <div>Game Difficulty</div>
+              <div
+                {...stylex.props(styles.selection)}
+                onClick={() => {
+                  setDropDownMenuGameDifficulty(true)
+                }}
+              >
+                {gameDifficulty}
+              </div>
+              {dropDownMenuGameDifficulty && (
+                <div>
+                  <ClearPopUpModel
+                    closePopUp={() => {
+                      setDropDownMenuGameDifficulty(false)
+                    }}
+                  />
+                  <div {...stylex.props(styles.dropDownMenu)}>
+                    <div
+                      onClick={() => {
+                        setGameDifficulty("easy")
+                        setDropDownMenuGameDifficulty(false)
+                      }}
+                    >
+                      easy
+                    </div>
+                    <div
+                      onClick={() => {
+                        setGameDifficulty("medium")
+                        setDropDownMenuGameDifficulty(false)
+                      }}
+                    >
+                      med
+                    </div>
+                    <div
+                      onClick={() => {
+                        setGameDifficulty("difficult")
+                        setDropDownMenuGameDifficulty(false)
+                      }}
+                    >
+                      difficult
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -167,19 +199,33 @@ const styles = stylex.create({
   gameInfoContainer: {
     width: "100%",
     display: "flex",
-    // height: "auto",
     flexDirection: "column",
     alignItems: "center",
     justifyItems: "center",
-    height: "10rem",
-    // backgroundColor: "pink",
   },
   gridContainer: {
     backgroundColor: "pink",
     height: "100%",
     width: "100%",
     flexGrow: "1",
-    // justifyItems: "center",
-    // alignContent: "center",
+  },
+  dropDownMenu: {
+    position: "absolute",
+    zIndex: 2,
+    backgroundColor: "yellow",
+    display: "flex",
+    flexDirection: "column",
+    width: "10rem",
+  },
+  gameDropDownMenuContainer: {
+    display: "flex",
+    backgroundColor: "gray",
+    gap: "2rem",
+  },
+  selection: {
+    border: "1px solid white",
+    backgroundColor: "lightgray",
+    width: "9rem",
+    padding: ".5rem",
   },
 })
