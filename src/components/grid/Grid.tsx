@@ -69,11 +69,12 @@ const calcuateNearbyMines = (
 type GridProps = {
   win: () => void
   lost: () => void
+  gridSize: number
+  mineSize: number
 }
-export const Grid = ({ win, lost }: GridProps) => {
-  // const [timer, setTimer] = useState(0)
+export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
+  console.log("GRID : ", gridSize, mineSize)
   const [game, setGame] = useState("on")
-  // const [startNew, setStartNew] = useState(false)
   const [, setRevealNodesCount] = useState<number>(0)
 
   const getNeighbourNodes = (x: number, y: number) => {
@@ -142,6 +143,13 @@ export const Grid = ({ win, lost }: GridProps) => {
     }
   }
 
+  const toggleFlag = (x: number, y: number, arr: GridArrType) => {
+    const tempArr = arr
+    tempArr[y][x].flag = !tempArr[y][x].flag
+
+    setGridArr([...tempArr])
+  }
+
   const girdItemClickHandler = (
     x: number,
     y: number,
@@ -153,8 +161,6 @@ export const Grid = ({ win, lost }: GridProps) => {
     if (mine) {
       showAllBombs(arr)
       setGame("over")
-      // setWinLostFunc("lose")
-      // lost()
       return
     }
 
@@ -180,9 +186,6 @@ export const Grid = ({ win, lost }: GridProps) => {
           setGame("win")
           setRevealNodesCount(0)
           showAllBombs(arr)
-          // setWinLostFunc("win")
-          win()
-          return
         }
         return newCount
       })
@@ -219,18 +222,12 @@ export const Grid = ({ win, lost }: GridProps) => {
     setGridArr([...tempArr])
   }
 
-  const toggleFlag = (x: number, y: number, arr: GridArrType) => {
-    const tempArr = arr
-    tempArr[y][x].flag = !tempArr[y][x].flag
-
-    setGridArr([...tempArr])
-  }
-
   const [gridArr, setGridArr] = useState<Array<Array<ItemType>>>([])
-  const gridSize = 3
-  const mineSize = 2
+  // const gridSize = 3
+  // const mineSize = 1
 
   const startNewGame = useCallback(() => {
+    console.log("new game: ", gridSize)
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
     arr.map((xArr) => {
@@ -240,11 +237,11 @@ export const Grid = ({ win, lost }: GridProps) => {
     })
 
     setGridArr([...arr])
-  }, [setGridArr])
+  }, [setGridArr, gridSize, mineSize])
 
   useEffect(() => {
     startNewGame()
-  }, [startNewGame])
+  }, [startNewGame, gridSize])
 
   // const winRef = useRef(win)
   // const lostRef = useRef(lost)
@@ -256,6 +253,7 @@ export const Grid = ({ win, lost }: GridProps) => {
       lost()
     }
   }, [game])
+
   return (
     <div
       {...stylex.props(gridStyles.base)}

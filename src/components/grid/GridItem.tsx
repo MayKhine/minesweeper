@@ -56,18 +56,16 @@ export const GridItem = ({
       {!item.flag && item.nearByMine > 0 && item.mask == false && (
         <p>{item.nearByMine}</p>
       )}
-
-      {/* <p>{item.mine}</p> */}
     </div>
   )
 }
 
 const gridItemStyles = stylex.create({
   base: {
-    // backgroundColor: "pink",
-    height: "3rem",
-    width: "3rem",
+    height: "2rem",
+    width: "2rem",
     border: "1px black solid",
+    fontSize: "1rem",
   },
   dynamicOption: (mine, nearByMine, mask) => ({
     backgroundColor:
