@@ -79,7 +79,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   const [showMines, setShowMines] = useState(false)
   const [timerSec, setTimerSec] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
-
+  const [flagSize, setFlagSize] = useState(0)
   useEffect(() => {
     let timer: number
 
@@ -166,6 +166,11 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   }
 
   const toggleFlag = (x: number, y: number, arr: GridArrType) => {
+    // increase the flag size
+    setFlagSize((prevVal) => {
+      const newVal = prevVal + 1
+      return newVal
+    })
     const tempArr = arr
     tempArr[y][x].flag = !tempArr[y][x].flag
 
@@ -253,7 +258,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   const startNewGame = useCallback(() => {
     setShowMines(false)
     setTimerSec(0)
-
+    setFlagSize(0)
     console.log("new game: ", gridSize)
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
@@ -289,7 +294,8 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
       }}
     >
       <div {...stylex.props(styles.timer)}> Timer : {formatTime(timerSec)}</div>
-
+      <div> Total number of mines: {mineSize}</div>
+      <div> Number of flags: {flagSize}</div>
       {game == "over" && (
         <PopUpModal
           text="OVER TEXT"
