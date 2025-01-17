@@ -1,4 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
+import { FaBomb } from "react-icons/fa"
+import { FaFlag } from "react-icons/fa6"
 
 export type ItemType = {
   x: number
@@ -22,6 +24,7 @@ export type GridItemProps = {
   arr: Array<Array<ItemType>>
   toggleFlag: (x: number, y: number, arr: Array<Array<ItemType>>) => void
   game: string
+  showMines: boolean
 }
 
 export const GridItem = ({
@@ -31,12 +34,18 @@ export const GridItem = ({
   arr,
   toggleFlag,
   game,
+  showMines,
 }: GridItemProps) => {
   return (
     <div
       {...stylex.props(
         gridItemStyles.base,
-        gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
+        gridItemStyles.dynamicOption(
+          item.mine,
+          item.nearByMine,
+          item.mask,
+          item.flag
+        )
       )}
       onClick={() => {
         if (item.flag || item.mask == false || game != "on") {
@@ -47,15 +56,28 @@ export const GridItem = ({
       }}
       onAuxClick={(e) => {
         if (e.button == 2 && item.mask == true && game == "on") {
-          // console.log(" TUN ON FLAGGG")
           toggleFlag(item.x, item.y, arr)
         }
       }}
     >
-      {item.flag && item.mask && <p> FLAG</p>}
-      {!item.flag && item.nearByMine > 0 && item.mask == false && (
-        <p>{item.nearByMine}</p>
+      {item.flag && item.mask && (
+        <div {...stylex.props(gridItemStyles.cell)}>
+          <FaFlag color="green" />
+        </div>
       )}
+
+      {showMines && item.mine && (
+        <div {...stylex.props(gridItemStyles.cell)}>
+          <FaBomb />
+        </div>
+      )}
+
+      {!item.mine &&
+        !item.flag &&
+        item.nearByMine > 0 &&
+        item.mask == false && (
+          <div {...stylex.props(gridItemStyles.cell)}>{item.nearByMine}</div>
+        )}
     </div>
   )
 }
@@ -66,6 +88,8 @@ const gridItemStyles = stylex.create({
     width: "2rem",
     border: "1px black solid",
     fontSize: "1rem",
+    justifyItems: "center",
+    alignContent: "center",
   },
   dynamicOption: (mine, nearByMine, mask) => ({
     backgroundColor:
@@ -75,6 +99,17 @@ const gridItemStyles = stylex.create({
           : nearByMine > 0
           ? "orange"
           : "pink"
-        : "gray",
+        : "lightgray",
   }),
+  cell: {
+    // width: "100%",
+    // height: "100%",
+    // display: "flex",
+    // flexDirection: "column",
+    // alignItems: "center",
+    // justifyItems: "center",
+    // alignContnet: "center",
+    // justifyContnet: "center",
+    // backgroundColor: "pink",
+  },
 })

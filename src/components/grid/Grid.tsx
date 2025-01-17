@@ -76,6 +76,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   console.log("GRID : ", gridSize, mineSize)
   const [game, setGame] = useState("on")
   const [, setRevealNodesCount] = useState<number>(0)
+  const [showMines, setShowMines] = useState(false)
 
   const getNeighbourNodes = (x: number, y: number) => {
     const result = []
@@ -161,6 +162,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
     if (mine) {
       showAllBombs(arr)
       setGame("over")
+      setShowMines(true)
       return
     }
 
@@ -227,6 +229,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   // const mineSize = 1
 
   const startNewGame = useCallback(() => {
+    setShowMines(false)
     console.log("new game: ", gridSize)
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
@@ -299,6 +302,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
                   arr={gridArr}
                   toggleFlag={toggleFlag}
                   game={game}
+                  showMines={showMines}
                 />
               )
             })}
