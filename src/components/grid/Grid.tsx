@@ -1,71 +1,76 @@
 import * as stylex from "@stylexjs/stylex"
 
 import { GridItem, ItemType } from "./GridItem"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { PopUpModal } from "../UI/PopUpModal"
 
 export type GridArrType = Array<Array<ItemType>>
+
+const generateArrayOfArr = (num: number) => {
+  const arr = new Array<Array<ItemType>>()
+  for (let i = 0; i < num; i++) {
+    arr.push([])
+    for (let x = 0; x < num; x++) {
+      const item: ItemType = {
+        x: x,
+        y: i,
+        mine: false,
+        nearByMine: 0,
+        mask: true,
+        queue: false,
+        flag: false,
+      }
+      arr[i].push(item)
+    }
+  }
+  return arr
+}
+
+const randomlyChangeMines = (
+  grid: Array<Array<ItemType>>,
+  numberOfChanges: number,
+  gridSize: number
+) => {
+  for (let changeCount = 0; changeCount < numberOfChanges; changeCount++) {
+    // Randomly select a row and column
+    const randomRow = Math.floor(Math.random() * gridSize)
+    const randomCol = Math.floor(Math.random() * gridSize)
+
+    // Toggle the mine value at the randomly selected position
+    if (!grid[randomRow][randomCol].mine) {
+      grid[randomRow][randomCol].mine = !grid[randomRow][randomCol].mine
+    } else {
+      //try again
+      changeCount = changeCount - 1
+    }
+  }
+}
+
+const calcuateNearbyMines = (
+  x: number,
+  y: number,
+  arr: Array<Array<ItemType>>,
+  gridSize: number
+) => {
+  for (let i = 0; i < 3; i++) {
+    const yVal = y + i - 1
+    for (let i2 = 0; i2 < 3; i2++) {
+      const xVal = x + i2 - 1
+      if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
+        if (arr[xVal][yVal].mine == true) {
+          arr[x][y].nearByMine = arr[x][y].nearByMine + 1
+        }
+      }
+    }
+  }
+  return false
+}
+
 export const Grid = () => {
+  // const [timer, setTimer] = useState(0)
   const [game, setGame] = useState("on")
-  const [startNew, setStartNew] = useState(false)
-  const [revealNodesCount, setRevealNodesCount] = useState(0)
-
-  const generateArrayOfArr = (num: number) => {
-    const arr = []
-    for (let i = 0; i < num; i++) {
-      arr.push([])
-      for (let x = 0; x < num; x++) {
-        const item: ItemType = {
-          x: x,
-          y: i,
-          mine: false,
-          nearByMine: 0,
-          mask: true,
-          queue: false,
-        }
-        arr[i].push(item)
-      }
-    }
-    return arr
-  }
-
-  const randomlyChangeMines = (
-    grid: Array<Array<ItemType>>,
-    numberOfChanges: number
-  ) => {
-    for (let changeCount = 0; changeCount < numberOfChanges; changeCount++) {
-      // Randomly select a row and column
-      const randomRow = Math.floor(Math.random() * gridSize)
-      const randomCol = Math.floor(Math.random() * gridSize)
-
-      // Toggle the mine value at the randomly selected position
-      if (!grid[randomRow][randomCol].mine) {
-        grid[randomRow][randomCol].mine = !grid[randomRow][randomCol].mine
-      } else {
-        //try again
-        changeCount = changeCount - 1
-      }
-    }
-  }
-
-  const calcuateNearbyMines = (
-    x: number,
-    y: number,
-    arr: Array<Array<ItemType>>
-  ) => {
-    for (let i = 0; i < 3; i++) {
-      const yVal = y + i - 1
-      for (let i2 = 0; i2 < 3; i2++) {
-        const xVal = x + i2 - 1
-        if (xVal >= 0 && yVal >= 0 && xVal < gridSize && yVal < gridSize) {
-          if (arr[xVal][yVal].mine == true) {
-            arr[x][y].nearByMine = arr[x][y].nearByMine + 1
-          }
-        }
-      }
-    }
-    return false
-  }
+  // const [startNew, setStartNew] = useState(false)
+  const [, setRevealNodesCount] = useState(0)
 
   const getNeighbourNodes = (x: number, y: number) => {
     const result = []
@@ -142,30 +147,33 @@ export const Grid = () => {
     const tempArr = arr
 
     if (mine) {
-      // tempArr[y][x].mask = false
       showAllBombs(arr)
       setGame("over")
       return
     }
 
-    //create a queue to visit
+    //create a queue to visit on where the click happens
     const queueToVist = []
     queueToVist.push({ y, x })
     tempArr[y][x].queue = true
 
     while (queueToVist.length > 0) {
+      // pop the one that is clicked
       const currentNode = queueToVist.pop()
-      // setRevealNum(revealNum + 1)
-      // const tempRevealNodesCount = revealNodesCount + 1
-      // setRevealNodesCount((revealNodesCount) => revealNodesCount + 1)
+
       setRevealNodesCount((prevCount) => {
+        //if the first click, start the timer
+        if (prevCount == 0) {
+          console.log("Start the timer: ")
+        }
+
         const newCount = prevCount + 1
+
         // Action to be performed immediately after state update
-        // console.log("State updated. New count:", newCount)
         if (newCount + mineSize == gridSize * gridSize) {
-          // console.log("new count: ", newCount, mineSize, gridSize)
           setGame("win")
           setRevealNodesCount(0)
+          showAllBombs(arr)
         }
         return newCount
       })
@@ -182,31 +190,24 @@ export const Grid = () => {
           for (let i = 0; i < curNodeNeighbourArr.length; i++) {
             const tempY = curNodeNeighbourArr[i].y
             const tempX = curNodeNeighbourArr[i].x
-            // console.log("CURRENT NODE: ", currentNode)
-            // console.log("NEIGHT BOUR CEHCK : ", tempArr[tempY][tempX])
             if (
               tempArr[tempY][tempX].mine == false &&
               tempArr[tempY][tempX].mask == true &&
               tempArr[tempY][tempX].queue == false
             ) {
-              // console.log("ADDED This nighbour to Queue ")
               //add add it to queue
               queueToVist.push({ y: tempY, x: tempX })
               //update the queue check
               tempArr[tempY][tempX].queue = true
             } else {
-              // console.log("NOT ADDED")
               continue
             }
           }
         }
-        // console.log("what is the current neightbours", queueToVist)
       }
     }
 
     setGridArr([...tempArr])
-    // checkWinState()
-    // checkWinState()
   }
 
   const toggleFlag = (x: number, y: number, arr: GridArrType) => {
@@ -216,79 +217,26 @@ export const Grid = () => {
     setGridArr([...tempArr])
   }
 
-  // const gridSize = 5
-  // const mineSize = 1
-  // const arr = generateArrayOfArr(gridSize)
-  // randomlyChangeMines(arr, mineSize)
-  // arr.map((xArr) => {
-  //   xArr.map((item: ItemType) => {
-  //     calcuateNearbyMines(item.x, item.y, arr)
-  //   })
-  // })
-
-  const [gridArr, setGridArr] = useState([])
-  const gridSize = 10
+  const [gridArr, setGridArr] = useState<Array<Array<ItemType>>>([])
+  const gridSize = 5
   const mineSize = 5
 
-  const startNewGame = () => {
-    // const gridSize = 5
-    // const mineSize = 1
+  const startNewGame = useCallback(() => {
     const arr = generateArrayOfArr(gridSize)
-    randomlyChangeMines(arr, mineSize)
+    randomlyChangeMines(arr, mineSize, gridSize)
     arr.map((xArr) => {
       xArr.map((item: ItemType) => {
-        calcuateNearbyMines(item.x, item.y, arr)
+        calcuateNearbyMines(item.x, item.y, arr, gridSize)
       })
     })
 
     setGridArr([...arr])
-  }
-  // const [gridArr, setGridArr] = useState(arr)
-
-  // const arr = [
-  //   [
-  //     { x: 0, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 1, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 2, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 3, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 4, y: 0, mine: false, nearByMine: 0, mask: true, queue: false },
-  //   ],
-  //   [
-  //     { x: 0, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 1, y: 1, mine: true, nearByMine: 0, mask: true, queue: false },
-  //     { x: 2, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 3, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 4, y: 1, mine: false, nearByMine: 0, mask: true, queue: false },
-  //   ],
-  //   [
-  //     { x: 0, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 1, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 2, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 3, y: 2, mine: true, nearByMine: 0, mask: true, queue: false },
-  //     { x: 4, y: 2, mine: false, nearByMine: 0, mask: true, queue: false },
-  //   ],
-  //   [
-  //     { x: 0, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 1, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 2, y: 3, mine: false, nearByMine: 0, mask: true, queue: false }, //
-  //     { x: 3, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 4, y: 3, mine: false, nearByMine: 0, mask: true, queue: false },
-  //   ],
-  //   [
-  //     { x: 0, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 1, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 2, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 3, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
-  //     { x: 4, y: 4, mine: false, nearByMine: 0, mask: true, queue: false },
-  //   ],
-  // ]
-
-  // checkWinState()
-  // console.log("Game state: ", game)
+  }, [setGridArr])
 
   useEffect(() => {
     startNewGame()
-  }, [startNew])
+  }, [startNewGame])
+
   return (
     <div
       {...stylex.props(gridStyles.base)}
@@ -301,7 +249,9 @@ export const Grid = () => {
           text="OVER TEXT"
           gameStatus={game}
           tryAgain={() => {
-            setStartNew(!startNew)
+            // setStartNew(!startNew)
+            startNewGame()
+            setRevealNodesCount(0)
           }}
           removePopUp={() => {
             setGame("on")
@@ -313,7 +263,7 @@ export const Grid = () => {
           text="WIN TEXT"
           gameStatus={game}
           tryAgain={() => {
-            setStartNew(!startNew)
+            startNewGame()
           }}
           removePopUp={() => {
             setGame("on")
