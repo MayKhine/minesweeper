@@ -315,6 +315,11 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
 }
 
 const gridStyles = stylex.create({
-  base: { backgroundColor: "lightgray" },
+  base: {
+    backgroundColor: "gray",
+    // alignItems: "center",
+    justifyItems: "center",
+    height: "100%",
+  },
   xArr: { display: "flex", flexDirection: "row" },
 })

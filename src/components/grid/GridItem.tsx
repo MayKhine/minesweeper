@@ -29,7 +29,6 @@ export type GridItemProps = {
 
 export const GridItem = ({
   item,
-  // gameOver,
   girdItemClickHandler,
   arr,
   toggleFlag,
@@ -40,12 +39,7 @@ export const GridItem = ({
     <div
       {...stylex.props(
         gridItemStyles.base,
-        gridItemStyles.dynamicOption(
-          item.mine,
-          item.nearByMine,
-          item.mask,
-          item.flag
-        )
+        gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
         if (item.flag || item.mask == false || game != "on") {
@@ -61,13 +55,13 @@ export const GridItem = ({
       }}
     >
       {item.flag && item.mask && (
-        <div {...stylex.props(gridItemStyles.cell)}>
+        <div>
           <FaFlag color="green" />
         </div>
       )}
 
       {showMines && item.mine && (
-        <div {...stylex.props(gridItemStyles.cell)}>
+        <div>
           <FaBomb />
         </div>
       )}
@@ -75,9 +69,7 @@ export const GridItem = ({
       {!item.mine &&
         !item.flag &&
         item.nearByMine > 0 &&
-        item.mask == false && (
-          <div {...stylex.props(gridItemStyles.cell)}>{item.nearByMine}</div>
-        )}
+        item.mask == false && <div>{item.nearByMine}</div>}
     </div>
   )
 }
@@ -86,7 +78,7 @@ const gridItemStyles = stylex.create({
   base: {
     height: "2rem",
     width: "2rem",
-    border: "1px black solid",
+    border: "1px white solid",
     fontSize: "1rem",
     justifyItems: "center",
     alignContent: "center",
@@ -101,15 +93,4 @@ const gridItemStyles = stylex.create({
           : "pink"
         : "lightgray",
   }),
-  cell: {
-    // width: "100%",
-    // height: "100%",
-    // display: "flex",
-    // flexDirection: "column",
-    // alignItems: "center",
-    // justifyItems: "center",
-    // alignContnet: "center",
-    // justifyContnet: "center",
-    // backgroundColor: "pink",
-  },
 })

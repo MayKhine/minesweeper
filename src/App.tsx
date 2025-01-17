@@ -1,5 +1,6 @@
 import { Grid } from "./components/grid/Grid"
 import { useState } from "react"
+import * as stylex from "@stylexjs/stylex"
 function App() {
   const [games, setGames] = useState({ win: 0, lost: 0 })
   const [gameSize, setGameSize] = useState("small")
@@ -55,87 +56,130 @@ function App() {
   }
 
   return (
-    <div>
-      Minesweeper
+    <div {...stylex.props(styles.base)}>
       <div>
-        Game Win: {games.win} , Game Lost: {games.lost}
+        <div {...stylex.props(styles.logo)}> Minesweeper</div>
+
+        <div {...stylex.props(styles.gameInfoContainer)}>
+          <div>
+            Game Win: {games.win} , Game Lost: {games.lost}
+          </div>
+          <div>
+            <form>
+              <label>
+                <input
+                  type="radio"
+                  name="gameSize"
+                  value="small"
+                  checked={gameSize === "small"}
+                  onChange={handleGameSizeSelection}
+                />
+                Small
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gameSize"
+                  value="medium"
+                  checked={gameSize === "medium"}
+                  onChange={handleGameSizeSelection}
+                />
+                Medium
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gameSize"
+                  value="large"
+                  checked={gameSize === "large"}
+                  onChange={handleGameSizeSelection}
+                />
+                Large
+              </label>
+            </form>
+          </div>
+          <div>
+            <form>
+              <label>
+                <input
+                  type="radio"
+                  name="gameDifficulty"
+                  value="easy"
+                  checked={gameDifficulty === "easy"}
+                  onChange={handleGameDifficultySelection}
+                />
+                Easy
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gameDifficulty"
+                  value="medium"
+                  checked={gameDifficulty === "medium"}
+                  onChange={handleGameDifficultySelection}
+                />
+                Medium
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gameDifficulty"
+                  value="difficult"
+                  checked={gameDifficulty === "difficult"}
+                  onChange={handleGameDifficultySelection}
+                />
+                Difficulty
+              </label>
+            </form>
+          </div>
+        </div>
       </div>
-      <div>
-        <form>
-          <label>
-            <input
-              type="radio"
-              name="gameSize"
-              value="small"
-              checked={gameSize === "small"}
-              onChange={handleGameSizeSelection}
-            />
-            Small
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gameSize"
-              value="medium"
-              checked={gameSize === "medium"}
-              onChange={handleGameSizeSelection}
-            />
-            Medium
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gameSize"
-              value="large"
-              checked={gameSize === "large"}
-              onChange={handleGameSizeSelection}
-            />
-            Large
-          </label>
-        </form>
+      <div {...stylex.props(styles.gridContainer)}>
+        <Grid
+          win={win}
+          lost={lost}
+          gridSize={calculateGridSize()}
+          mineSize={calculateMineSize()}
+        />
       </div>
-      <div>
-        <form>
-          <label>
-            <input
-              type="radio"
-              name="gameDifficulty"
-              value="easy"
-              checked={gameDifficulty === "easy"}
-              onChange={handleGameDifficultySelection}
-            />
-            Easy
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gameDifficulty"
-              value="medium"
-              checked={gameDifficulty === "medium"}
-              onChange={handleGameDifficultySelection}
-            />
-            Medium
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gameDifficulty"
-              value="difficult"
-              checked={gameDifficulty === "difficult"}
-              onChange={handleGameDifficultySelection}
-            />
-            Difficulty
-          </label>
-        </form>
-      </div>
-      <Grid
-        win={win}
-        lost={lost}
-        gridSize={calculateGridSize()}
-        mineSize={calculateMineSize()}
-      />
     </div>
   )
 }
 
 export default App
+
+const styles = stylex.create({
+  base: {
+    minHeight: "100vh",
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "green",
+  },
+  logo: {
+    // backgroundColor: "pink",
+    width: "100%",
+    fontSize: "2rem",
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  gameInfoContainer: {
+    width: "100%",
+    display: "flex",
+    // height: "auto",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyItems: "center",
+    height: "10rem",
+    // backgroundColor: "pink",
+  },
+  gridContainer: {
+    backgroundColor: "pink",
+    height: "100%",
+    width: "100%",
+    flexGrow: "1",
+    // justifyItems: "center",
+    // alignContent: "center",
+  },
+})
