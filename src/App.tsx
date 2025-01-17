@@ -1,16 +1,16 @@
 import { Grid } from "./components/grid/Grid"
 import { useState } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { ClearPopUpModel } from "./components/UI/ClearPopUpModel"
-import { RiArrowDownSLine } from "react-icons/ri"
+// import { ClearPopUpModel } from "./components/UI/ClearPopUpModel"
+// import { RiArrowDownSLine } from "react-icons/ri"
 
 function App() {
   const [games, setGames] = useState({ win: 0, lost: 0 })
-  const [gameSize, setGameSize] = useState("small")
-  const [gameDifficulty, setGameDifficulty] = useState("easy")
-  const [dropDownMenuGameSize, setDropDownMenuGameSize] = useState(false)
-  const [dropDownMenuGameDifficulty, setDropDownMenuGameDifficulty] =
-    useState(false)
+  // const [gameSize, setGameSize] = useState("small")
+  // const [gameDifficulty, setGameDifficulty] = useState("easy")
+  // const [dropDownMenuGameSize, setDropDownMenuGameSize] = useState(false)
+  // const [dropDownMenuGameDifficulty, setDropDownMenuGameDifficulty] =
+  useState(false)
 
   const win = () => {
     setGames((prevGames) => ({
@@ -25,33 +25,33 @@ function App() {
     }))
   }
 
-  const calculateGridSize = () => {
-    console.log("Cal grid size", gameSize)
-    if (gameSize === "small") {
-      return 9
-    }
-    if (gameSize === "medium") {
-      return 16
-    }
-    if (gameSize === "large") {
-      return 30
-    }
-    return 1
-  }
+  // const calculateGridSize = () => {
+  //   console.log("Cal grid size", gameSize)
+  //   if (gameSize === "small") {
+  //     return 9
+  //   }
+  //   if (gameSize === "medium") {
+  //     return 16
+  //   }
+  //   if (gameSize === "large") {
+  //     return 30
+  //   }
+  //   return 1
+  // }
 
-  const calculateMineSize = () => {
-    const gridSize = calculateGridSize()
-    if (gameDifficulty === "easy") {
-      return Math.round(gridSize * gridSize * 0.1)
-    }
-    if (gameDifficulty === "medium") {
-      return Math.round(gridSize * gridSize * 0.15)
-    }
-    if (gameDifficulty === "difficult") {
-      return Math.round(gridSize * gridSize * 0.2)
-    }
-    return 1
-  }
+  // const calculateMineSize = () => {
+  //   const gridSize = calculateGridSize()
+  //   if (gameDifficulty === "easy") {
+  //     return Math.round(gridSize * gridSize * 0.1)
+  //   }
+  //   if (gameDifficulty === "medium") {
+  //     return Math.round(gridSize * gridSize * 0.15)
+  //   }
+  //   if (gameDifficulty === "difficult") {
+  //     return Math.round(gridSize * gridSize * 0.2)
+  //   }
+  //   return 1
+  // }
 
   return (
     <div {...stylex.props(styles.base)}>
@@ -59,7 +59,7 @@ function App() {
         <div {...stylex.props(styles.logo)}> Minesweeper</div>
 
         <div {...stylex.props(styles.gameInfoContainer)}>
-          <div {...stylex.props(styles.gameDropDownMenuContainer)}>
+          {/* <div {...stylex.props(styles.gameDropDownMenuContainer)}>
             <div>
               <div
                 {...stylex.props(styles.selection)}
@@ -152,7 +152,7 @@ function App() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
           <div {...stylex.props(styles.gameWinLostContainer)}>
             <div> WIN</div>
@@ -166,8 +166,8 @@ function App() {
         <Grid
           win={win}
           lost={lost}
-          gridSize={calculateGridSize()}
-          mineSize={calculateMineSize()}
+          // gridSize={calculateGridSize()}
+          // mineSize={calculateMineSize()}
         />
       </div>
     </div>
@@ -204,10 +204,8 @@ const styles = stylex.create({
     flexDirection: "column",
     gap: ".5rem",
     alignItems: "flex-start",
-    // alignContent: "flex-end",
-    // justifyItems: "flex-end",
-    justifyContent: "flex-end",
-    backgroundColor: "lightyellow",
+    // justifyContent: "flex-end",
+    // backgroundColor: "lightyellow",
   },
   dropDownMenu: {
     position: "absolute",
@@ -215,12 +213,12 @@ const styles = stylex.create({
     backgroundColor: "yellow",
     display: "flex",
     flexDirection: "column",
-    width: "10rem",
+    width: "7rem",
   },
   selection: {
     border: ".1rem solid black",
-    backgroundColor: "white",
-    width: "9rem",
+    // backgroundColor: "white",
+    width: "7rem",
     padding: ".5rem",
     display: "flex",
     flexDirection: "row",
@@ -239,7 +237,7 @@ const styles = stylex.create({
   },
 
   gridContainer: {
-    backgroundColor: "pink",
+    // backgroundColor: "pink",
     height: "100%",
     width: "100%",
     flexGrow: "1",

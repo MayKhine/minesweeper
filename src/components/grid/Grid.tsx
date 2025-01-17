@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { GridItem, ItemType } from "./GridItem"
 import { useCallback, useEffect, useState } from "react"
 import { PopUpModal } from "../UI/PopUpModal"
+import { GameOptions } from "./GameOptions"
 
 export type GridArrType = Array<Array<ItemType>>
 
@@ -69,32 +70,40 @@ const calcuateNearbyMines = (
 type GridProps = {
   win: () => void
   lost: () => void
-  gridSize: number
-  mineSize: number
+  // gridSize: number
+  // mineSize: number
 }
-export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
-  console.log("GRID : ", gridSize, mineSize)
+export const Grid = ({ win, lost }: GridProps) => {
+  // console.log("GRID : ", gridSize, mineSize)
+  const [gridSize, setGridSize] = useState(3)
+  const [mineSize, setMineSize] = useState(3)
+
   const [game, setGame] = useState("on")
   const [, setRevealNodesCount] = useState<number>(0)
   const [showMines, setShowMines] = useState(false)
   const [timerSec, setTimerSec] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [flagSize, setFlagSize] = useState(0)
+
   useEffect(() => {
     let timer: number
 
     if (isRunning) {
       timer = setInterval(() => {
         setTimerSec((prevTime) => prevTime + 1)
-      }, 1000)
+      }, 10) //1000
     }
-    return () => clearInterval(timer) // Cleanup on component unmount or stop
+    return () => clearInterval(timer) //clean up the timer interval
   }, [isRunning])
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${minutes.toString().padStart(2, "0")}:${secs
+  const formatTime = (timeInCentiseconds: number) => {
+    const centiseconds = timeInCentiseconds % 100
+    const seconds = Math.floor((timeInCentiseconds / 100) % 60)
+    const minutes = Math.floor((timeInCentiseconds / (100 * 60)) % 60)
+    const hours = Math.floor(timeInCentiseconds / (100 * 60 * 60))
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${centiseconds
       .toString()
       .padStart(2, "0")}`
   }
@@ -293,9 +302,25 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
         e.preventDefault()
       }}
     >
-      <div {...stylex.props(styles.timer)}> Timer : {formatTime(timerSec)}</div>
-      <div> Total number of mines: {mineSize}</div>
-      <div> Number of flags: {flagSize}</div>
+      <div {...stylex.props(styles.curGameInfoContainer)}>
+        <div {...stylex.props(styles.gameOptionsContainer)}>
+          <GameOptions
+            setGridSize={(gridSize: number) => {
+              setGridSize(gridSize)
+            }}
+            setMineSize={(mineSize: number) => {
+              setMineSize(mineSize)
+            }}
+          />
+        </div>
+        <div {...stylex.props(styles.gameStatusContainer)}>
+          <div style={{ display: "flex", gap: ".5rem" }}>
+            <div>MINES {mineSize}</div> <div>|</div>{" "}
+            <div> FLAGS {flagSize}</div>
+          </div>
+          <div {...stylex.props(styles.timer)}> {formatTime(timerSec)}</div>
+        </div>
+      </div>
       {game == "over" && (
         <PopUpModal
           text="OVER TEXT"
@@ -322,39 +347,79 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
           }}
         />
       )}
-      {gridArr.map((eachArr, key) => {
-        return (
-          <div {...stylex.props(styles.xArr)} key={key}>
-            {eachArr.map((item: ItemType, key) => {
-              return (
-                <GridItem
-                  item={item}
-                  key={key}
-                  girdItemClickHandler={girdItemClickHandler}
-                  arr={gridArr}
-                  toggleFlag={toggleFlag}
-                  game={game}
-                  showMines={showMines}
-                />
-              )
-            })}
-          </div>
-        )
-      })}
+      <div {...stylex.props(styles.gridContainer)}>
+        {gridArr.map((eachArr, key) => {
+          return (
+            <div {...stylex.props(styles.xArr)} key={key}>
+              {eachArr.map((item: ItemType, key) => {
+                return (
+                  <GridItem
+                    item={item}
+                    key={key}
+                    girdItemClickHandler={girdItemClickHandler}
+                    arr={gridArr}
+                    toggleFlag={toggleFlag}
+                    game={game}
+                    showMines={showMines}
+                  />
+                )
+              })}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "gray",
+    // display: "flex",
+    // flexDirection: "column",
     // alignItems: "center",
-    justifyItems: "center",
+    // justifyItems: "center",
+    width: "100%",
     height: "100%",
+    // backgroundColor: "lightblue",
   },
-  xArr: { display: "flex", flexDirection: "row" },
   timer: {
-    backgroundColor: "lightgray",
-    padding: "1rem",
+    fontSize: "2rem",
+  },
+  curGameInfoContainer: {
+    width: "100%",
+    // fontSize: "2rem",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // justifyItems: "flex-end",
+    // alignItems: "flex-end",
+    marginBottom: "2rem",
+  },
+
+  gameOptionsContainer: {
+    // backgroundColor: "pink"
+  },
+  gameStatusContainer: {
+    // backgroundColor: "lightyellow",
+    display: "flex",
+    flexDirection: "column",
+    // justifyItems: "flex-end",
+    alignItems: "flex-end",
+    justifyContent: "flex-end",
+  },
+  gridContainer: {
+    backgroundColor: "black",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyItems: "center",
+    // width: "100%",
+    // height: "100%",
+  },
+  xArr: {
+    display: "flex",
+    flexDirection: "row",
+    // border: ".05rem solid black",
+    margin: "0",
   },
 })

@@ -78,7 +78,7 @@ const gridItemStyles = stylex.create({
   base: {
     height: "2rem",
     width: "2rem",
-    border: "1px black solid",
+    border: "1px lightgray solid",
     fontSize: "1rem",
     display: "flex",
     flexDirection: "column",
@@ -93,6 +93,6 @@ const gridItemStyles = stylex.create({
           : nearByMine > 0
           ? "orange"
           : "pink"
-        : "lightgray",
+        : "gray",
   }),
 })
