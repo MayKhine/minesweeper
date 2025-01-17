@@ -1,56 +1,71 @@
-import * as styleX from "@stylexjs/stylex"
+import * as stylex from "@stylexjs/stylex"
 
 export type PopUpModalProps = {
-  gameStatus: string
   text: string
+  buttonText: string
   tryAgain: () => void
   removePopUp: () => void
 }
 export const PopUpModal = ({
-  gameStatus,
   text,
+  buttonText,
   tryAgain,
   removePopUp,
 }: PopUpModalProps) => {
   return (
-    <div {...styleX.props(popUpModalStyles.base)}>
-      <div {...styleX.props(popUpModalStyles.modal)}>
-        <div> Game Status: {gameStatus} </div>
-        <div> {text}</div>
-        <button
+    <div {...stylex.props(styles.base)}>
+      <div {...stylex.props(styles.textContainer)}>
+        <div {...stylex.props(styles.text)}> {text}</div>
+        <div
+          {...stylex.props(styles.button)}
           onClick={() => {
             tryAgain()
             removePopUp()
           }}
         >
-          Play again
-        </button>
+          {buttonText}
+        </div>
       </div>
     </div>
   )
 }
 
-const popUpModalStyles = styleX.create({
+const styles = stylex.create({
   base: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
     width: "100%",
     height: "100%",
     zIndex: "1",
     left: 0,
     top: 0,
-    position: "absolute",
+    position: "fixed",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
-  modal: {
-    backgroundColor: "pink",
+  textContainer: {
+    padding: "2rem",
+    paddingLeft: "4rem",
+    paddingRight: "4rem",
+    backgroundColor: "lightgray",
     display: "flex",
     flexDirection: "column",
-    width: "10rem",
-    height: "10rem",
-    // alignItems: "center",
-    // alignSelf: "center",
-    // justifyConent: "center",
+    gap: "1rem",
+  },
+  text: {
+    fontSize: "1.2rem",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  button: {
+    backgroundColor: "black",
+    padding: ".5rem",
+    border: "1px solid black",
+    color: "white",
+    fontSize: ".8rem",
+    fontWeight: "600",
+    display: "flex",
+    justifyContent: "center",
   },
 })

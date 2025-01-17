@@ -4,6 +4,8 @@ import { GridItem, ItemType } from "./GridItem"
 import { useCallback, useEffect, useState } from "react"
 import { PopUpModal } from "../UI/PopUpModal"
 import { GameOptions } from "./GameOptions"
+import { OverlayPopUp } from "../UI/OverlayPopUp"
+import { ClearPopUpModel } from "../UI/ClearPopUpModel"
 
 export type GridArrType = Array<Array<ItemType>>
 
@@ -285,8 +287,6 @@ export const Grid = ({ win, lost }: GridProps) => {
     startNewGame()
   }, [startNewGame, gridSize])
 
-  // const winRef = useRef(win)
-  // const lostRef = useRef(lost)
   useEffect(() => {
     if (game === "win") {
       win()
@@ -303,6 +303,34 @@ export const Grid = ({ win, lost }: GridProps) => {
         e.preventDefault()
       }}
     >
+      {game == "over" && (
+        <PopUpModal
+          text="GAME OVER"
+          buttonText="Try Again"
+          // gameStatus={game}
+          tryAgain={() => {
+            startNewGame()
+            setRevealNodesCount(0)
+          }}
+          removePopUp={() => {
+            setGame("on")
+          }}
+        />
+      )}
+      {game == "win" && (
+        <PopUpModal
+          text="YOU WIN"
+          buttonText="One More Game"
+          // gameStatus={game}
+          tryAgain={() => {
+            startNewGame()
+          }}
+          removePopUp={() => {
+            setGame("on")
+          }}
+        />
+      )}
+
       <div {...stylex.props(styles.curGameInfoContainer)}>
         <div {...stylex.props(styles.gameOptionsContainer)}>
           <GameOptions
@@ -322,32 +350,7 @@ export const Grid = ({ win, lost }: GridProps) => {
           <div {...stylex.props(styles.timer)}> {formatTime(timerSec)}</div>
         </div>
       </div>
-      {game == "over" && (
-        <PopUpModal
-          text="OVER TEXT"
-          gameStatus={game}
-          tryAgain={() => {
-            // setStartNew(!startNew)
-            startNewGame()
-            setRevealNodesCount(0)
-          }}
-          removePopUp={() => {
-            setGame("on")
-          }}
-        />
-      )}
-      {game == "win" && (
-        <PopUpModal
-          text="WIN TEXT"
-          gameStatus={game}
-          tryAgain={() => {
-            startNewGame()
-          }}
-          removePopUp={() => {
-            setGame("on")
-          }}
-        />
-      )}
+
       <div {...stylex.props(styles.gridContainer)}>
         {gridArr.map((eachArr, key) => {
           return (
