@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { FaBomb } from "react-icons/fa"
-import { FaFlag } from "react-icons/fa6"
+import { MdFlag } from "react-icons/md"
 
 export type ItemType = {
   x: number
@@ -25,6 +25,7 @@ export type GridItemProps = {
   toggleFlag: (x: number, y: number, arr: Array<Array<ItemType>>) => void
   game: string
   showMines: boolean
+  gridSize: number
 }
 
 export const GridItem = ({
@@ -34,12 +35,13 @@ export const GridItem = ({
   toggleFlag,
   game,
   showMines,
+  gridSize,
 }: GridItemProps) => {
   return (
     <div
       {...stylex.props(
-        gridItemStyles.base,
-        gridItemStyles.dynamicOption(item.mine, item.nearByMine, item.mask)
+        styles.base,
+        styles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
         if (item.flag || item.mask == false || game != "on") {
@@ -55,13 +57,13 @@ export const GridItem = ({
       }}
     >
       {item.flag && item.mask && (
-        <div>
-          <FaFlag color="green" />
+        <div {...stylex.props(styles.textSize(gridSize))}>
+          <MdFlag />
         </div>
       )}
 
       {showMines && item.mine && (
-        <div>
+        <div {...stylex.props(styles.textSize(gridSize))}>
           <FaBomb />
         </div>
       )}
@@ -69,24 +71,24 @@ export const GridItem = ({
       {!item.mine &&
         !item.flag &&
         item.nearByMine > 0 &&
-        item.mask == false && <div>{item.nearByMine}</div>}
+        item.mask == false && (
+          <div {...stylex.props(styles.textSize(gridSize))}>
+            {item.nearByMine}
+          </div>
+        )}
     </div>
   )
 }
 
-const gridItemStyles = stylex.create({
+const styles = stylex.create({
   base: {
-    // height: "2rem",
-    // width: "2rem",
     border: "1px lightgray solid",
-    fontSize: "1rem",
+    fontSize: "1.5em",
     display: "flex",
     flexDirection: "column",
     textAlign: "center",
     justifyContent: "center",
     width: "100%",
-    // height: "100%",
-    // width: "4rem",
     aspectRatio: "1",
   },
   dynamicOption: (mine, nearByMine, mask) => ({
@@ -96,7 +98,10 @@ const gridItemStyles = stylex.create({
           ? "red"
           : nearByMine > 0
           ? "orange"
-          : "pink"
+          : "lightgray"
         : "gray",
+  }),
+  textSize: (gridSize: number) => ({
+    fontSize: gridSize == 5 ? "2rem" : gridSize == 9 ? "1.5rem" : "1rem",
   }),
 })

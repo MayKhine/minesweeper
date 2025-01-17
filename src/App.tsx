@@ -54,121 +54,23 @@ function App() {
   // }
 
   return (
-    <div {...stylex.props(styles.base)}>
-      <div>
-        <div {...stylex.props(styles.logo)}> Minesweeper</div>
+    <div {...stylex.props(styles.page)}>
+      <div {...stylex.props(styles.gameContainer)}>
+        <div>
+          <div {...stylex.props(styles.logo)}> Minesweeper</div>
 
-        <div {...stylex.props(styles.gameInfoContainer)}>
-          {/* <div {...stylex.props(styles.gameDropDownMenuContainer)}>
-            <div>
-              <div
-                {...stylex.props(styles.selection)}
-                onClick={() => {
-                  setDropDownMenuGameSize(true)
-                }}
-              >
-                <div>{gameSize}</div>
-                <RiArrowDownSLine style={{ alignSelf: "center" }} />
-              </div>
-              {dropDownMenuGameSize && (
-                <div>
-                  <ClearPopUpModel
-                    closePopUp={() => {
-                      setDropDownMenuGameSize(false)
-                    }}
-                  />
-                  <div {...stylex.props(styles.dropDownMenu)}>
-                    <div
-                      onClick={() => {
-                        setGameSize("small")
-                        setDropDownMenuGameSize(false)
-                      }}
-                    >
-                      small
-                    </div>
-                    <div
-                      onClick={() => {
-                        setGameSize("medium")
-                        setDropDownMenuGameSize(false)
-                      }}
-                    >
-                      med
-                    </div>
-                    <div
-                      onClick={() => {
-                        setGameSize("large")
-                        setDropDownMenuGameSize(false)
-                      }}
-                    >
-                      large
-                    </div>
-                  </div>
-                </div>
-              )}
+          <div {...stylex.props(styles.gameInfoContainer)}>
+            <div {...stylex.props(styles.gameWinLostContainer)}>
+              <div> WIN</div>
+              <div {...stylex.props(styles.gameNum)}>{games.win}</div>
+              <div> LOST</div>
+              <div {...stylex.props(styles.gameNum)}>{games.lost}</div>
             </div>
-            <div>
-              <div
-                {...stylex.props(styles.selection)}
-                onClick={() => {
-                  setDropDownMenuGameDifficulty(true)
-                }}
-              >
-                <div> {gameDifficulty}</div>
-                <RiArrowDownSLine style={{ alignSelf: "center" }} />
-              </div>
-              {dropDownMenuGameDifficulty && (
-                <div>
-                  <ClearPopUpModel
-                    closePopUp={() => {
-                      setDropDownMenuGameDifficulty(false)
-                    }}
-                  />
-                  <div {...stylex.props(styles.dropDownMenu)}>
-                    <div
-                      onClick={() => {
-                        setGameDifficulty("easy")
-                        setDropDownMenuGameDifficulty(false)
-                      }}
-                    >
-                      easy
-                    </div>
-                    <div
-                      onClick={() => {
-                        setGameDifficulty("medium")
-                        setDropDownMenuGameDifficulty(false)
-                      }}
-                    >
-                      med
-                    </div>
-                    <div
-                      onClick={() => {
-                        setGameDifficulty("difficult")
-                        setDropDownMenuGameDifficulty(false)
-                      }}
-                    >
-                      difficult
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div> */}
-
-          <div {...stylex.props(styles.gameWinLostContainer)}>
-            <div> WIN</div>
-            <div {...stylex.props(styles.gameNum)}>{games.win}</div>
-            <div> LOST</div>
-            <div {...stylex.props(styles.gameNum)}>{games.lost}</div>
           </div>
         </div>
-      </div>
-      <div {...stylex.props(styles.gridContainer)}>
-        <Grid
-          win={win}
-          lost={lost}
-          // gridSize={calculateGridSize()}
-          // mineSize={calculateMineSize()}
-        />
+        <div {...stylex.props(styles.gridContainer)}>
+          <Grid win={win} lost={lost} />
+        </div>
       </div>
     </div>
   )
@@ -177,13 +79,26 @@ function App() {
 export default App
 
 const styles = stylex.create({
-  base: {
-    height: "100%",
+  page: {
     width: "100%",
     display: "flex",
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    justifyItems: "center",
+  },
+  gameContainer: {
+    display: "flex",
     flexDirection: "column",
-    backgroundColor: "lightgray",
     padding: "2rem",
+
+    "@media (max-width: 576px)": {
+      width: "100%",
+    },
+
+    "@media (min-width: 577px) ": {
+      width: "35rem",
+    },
   },
   logo: {
     width: "100%",
@@ -191,6 +106,10 @@ const styles = stylex.create({
     fontWeight: "600",
     display: "flex",
     justifyContent: "flex-end",
+    marginTop: "1rem",
+    // "@media (min-height: 900px)": {
+    //   marginTop: "2rem",
+    // },
   },
   gameInfoContainer: {
     marginTop: "2rem",
@@ -237,7 +156,7 @@ const styles = stylex.create({
   },
 
   gridContainer: {
-    // backgroundColor: "pink",
+    // backgroundColor: "white",
     height: "100%",
     width: "100%",
     flexGrow: "1",

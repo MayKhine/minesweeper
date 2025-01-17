@@ -4,8 +4,6 @@ import { GridItem, ItemType } from "./GridItem"
 import { useCallback, useEffect, useState } from "react"
 import { PopUpModal } from "../UI/PopUpModal"
 import { GameOptions } from "./GameOptions"
-import { OverlayPopUp } from "../UI/OverlayPopUp"
-import { ClearPopUpModel } from "../UI/ClearPopUpModel"
 
 export type GridArrType = Array<Array<ItemType>>
 
@@ -365,6 +363,7 @@ export const Grid = ({ win, lost }: GridProps) => {
                     toggleFlag={toggleFlag}
                     game={game}
                     showMines={showMines}
+                    gridSize={gridSize}
                   />
                 )
               })}
@@ -378,13 +377,15 @@ export const Grid = ({ win, lost }: GridProps) => {
 
 const styles = stylex.create({
   base: {
-    // display: "flex",
-    // flexDirection: "column",
-    // alignItems: "center",
-    // justifyItems: "center",
     width: "100%",
     height: "100%",
-    // backgroundColor: "lightblue",
+    // "@media (max-width: 576px)": {
+    //   width: "100%",
+    // },
+
+    // "@media (min-width: 577px) ": {
+    //   width: "35rem",
+    // },
   },
   timer: {
     fontSize: "2rem",
@@ -411,14 +412,27 @@ const styles = stylex.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
   },
+  // gridContainer: {
+  //   backgroundColor: "red",
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   alignItems: "center",
+  //   justifyItems: "center",
+  //   // width: "100%",
+
+  //   width: {
+  //     default: "55rem",
+  //     "@media (max-width: 768px)": "100%",
+  //     "@media (min-width: 769px) and (max-width: 992px)": "50rem",
+  //   },
+  // },
   gridContainer: {
-    backgroundColor: "pink",
+    // backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyItems: "center",
-    // width: "100%",
-    // height: "100%",
+    width: "100%",
   },
   xArr: {
     display: "flex",
