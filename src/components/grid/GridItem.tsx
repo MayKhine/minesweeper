@@ -78,10 +78,12 @@ const gridItemStyles = stylex.create({
   base: {
     height: "2rem",
     width: "2rem",
-    border: "1px white solid",
+    border: "1px black solid",
     fontSize: "1rem",
-    justifyItems: "center",
-    alignContent: "center",
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    justifyContent: "center",
   },
   dynamicOption: (mine, nearByMine, mask) => ({
     backgroundColor:

@@ -2,6 +2,8 @@ import { Grid } from "./components/grid/Grid"
 import { useState } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { ClearPopUpModel } from "./components/UI/ClearPopUpModel"
+import { RiArrowDownSLine } from "react-icons/ri"
+
 function App() {
   const [games, setGames] = useState({ win: 0, lost: 0 })
   const [gameSize, setGameSize] = useState("small")
@@ -21,15 +23,6 @@ function App() {
       ...prevGames,
       lost: prevGames.lost + 1,
     }))
-  }
-  const handleGameSizeSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGameSize(e.target.value)
-  }
-
-  const handleGameDifficultySelection = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setGameDifficulty(e.target.value)
   }
 
   const calculateGridSize = () => {
@@ -66,20 +59,16 @@ function App() {
         <div {...stylex.props(styles.logo)}> Minesweeper</div>
 
         <div {...stylex.props(styles.gameInfoContainer)}>
-          <div>
-            Game Win: {games.win} , Game Lost: {games.lost}
-          </div>
-
           <div {...stylex.props(styles.gameDropDownMenuContainer)}>
             <div>
-              <div>Game Size</div>
               <div
                 {...stylex.props(styles.selection)}
                 onClick={() => {
                   setDropDownMenuGameSize(true)
                 }}
               >
-                {gameSize}
+                <div>{gameSize}</div>
+                <RiArrowDownSLine style={{ alignSelf: "center" }} />
               </div>
               {dropDownMenuGameSize && (
                 <div>
@@ -118,14 +107,14 @@ function App() {
               )}
             </div>
             <div>
-              <div>Game Difficulty</div>
               <div
                 {...stylex.props(styles.selection)}
                 onClick={() => {
                   setDropDownMenuGameDifficulty(true)
                 }}
               >
-                {gameDifficulty}
+                <div> {gameDifficulty}</div>
+                <RiArrowDownSLine style={{ alignSelf: "center" }} />
               </div>
               {dropDownMenuGameDifficulty && (
                 <div>
@@ -164,6 +153,13 @@ function App() {
               )}
             </div>
           </div>
+
+          <div {...stylex.props(styles.gameWinLostContainer)}>
+            <div> WIN</div>
+            <div {...stylex.props(styles.gameNum)}>{games.win}</div>
+            <div> LOST</div>
+            <div {...stylex.props(styles.gameNum)}>{games.lost}</div>
+          </div>
         </div>
       </div>
       <div {...stylex.props(styles.gridContainer)}>
@@ -182,32 +178,36 @@ export default App
 
 const styles = stylex.create({
   base: {
-    minHeight: "100vh",
     height: "100%",
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "green",
+    backgroundColor: "lightgray",
+    padding: "2rem",
   },
   logo: {
-    // backgroundColor: "pink",
     width: "100%",
     fontSize: "2rem",
     fontWeight: "600",
-    textAlign: "center",
+    display: "flex",
+    justifyContent: "flex-end",
   },
   gameInfoContainer: {
+    marginTop: "2rem",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+  },
+  gameDropDownMenuContainer: {
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyItems: "center",
-  },
-  gridContainer: {
-    backgroundColor: "pink",
-    height: "100%",
-    width: "100%",
-    flexGrow: "1",
+    gap: ".5rem",
+    alignItems: "flex-start",
+    // alignContent: "flex-end",
+    // justifyItems: "flex-end",
+    justifyContent: "flex-end",
+    backgroundColor: "lightyellow",
   },
   dropDownMenu: {
     position: "absolute",
@@ -217,15 +217,34 @@ const styles = stylex.create({
     flexDirection: "column",
     width: "10rem",
   },
-  gameDropDownMenuContainer: {
-    display: "flex",
-    backgroundColor: "gray",
-    gap: "2rem",
-  },
   selection: {
-    border: "1px solid white",
-    backgroundColor: "lightgray",
+    border: ".1rem solid black",
+    backgroundColor: "white",
     width: "9rem",
     padding: ".5rem",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  gameWinLostContainer: {
+    // backgroundColor: "pink",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    // alignContent: "flex-end",
+    // justifyContent: "flex-end",
+    // justifyItems: "flex-end",
+    alignItems: "flex-end",
+  },
+
+  gridContainer: {
+    backgroundColor: "pink",
+    height: "100%",
+    width: "100%",
+    flexGrow: "1",
+  },
+  gameNum: {
+    fontSize: "2rem",
   },
 })
