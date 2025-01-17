@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { FaBomb } from "react-icons/fa"
 import { MdFlag } from "react-icons/md"
-
+import { colors } from "../../tokens.stylex"
 export type ItemType = {
   x: number
   y: number
@@ -40,7 +40,7 @@ export const GridItem = ({
   return (
     <div
       {...stylex.props(
-        styles.base,
+        styles.base(gridSize),
         styles.dynamicOption(item.mine, item.nearByMine, item.mask)
       )}
       onClick={() => {
@@ -58,13 +58,13 @@ export const GridItem = ({
     >
       {item.flag && item.mask && (
         <div {...stylex.props(styles.textSize(gridSize))}>
-          <MdFlag />
+          <MdFlag color={colors.black} />
         </div>
       )}
 
       {showMines && item.mine && (
         <div {...stylex.props(styles.textSize(gridSize))}>
-          <FaBomb />
+          <FaBomb color={colors.black} />
         </div>
       )}
 
@@ -81,8 +81,15 @@ export const GridItem = ({
 }
 
 const styles = stylex.create({
-  base: {
-    border: "1px lightgray solid",
+  base: (gridSize: number) => ({
+    // border: `2px ${colors.black} solid`,
+    border:
+      gridSize == 5
+        ? `2.5px ${colors.gray3} solid`
+        : gridSize == 9
+        ? `1.5px ${colors.gray3} solid`
+        : `1px ${colors.gray3} solid`,
+
     fontSize: "1.5em",
     display: "flex",
     flexDirection: "column",
@@ -90,16 +97,16 @@ const styles = stylex.create({
     justifyContent: "center",
     width: "100%",
     aspectRatio: "1",
-  },
+  }),
   dynamicOption: (mine, nearByMine, mask) => ({
     backgroundColor:
       mask == false
         ? mine
           ? "red"
           : nearByMine > 0
-          ? "orange"
-          : "lightgray"
-        : "gray",
+          ? `${colors.gray2}`
+          : `${colors.gray1}`
+        : `${colors.gray4}`,
   }),
   textSize: (gridSize: number) => ({
     fontSize: gridSize == 5 ? "2rem" : gridSize == 9 ? "1.5rem" : "1rem",

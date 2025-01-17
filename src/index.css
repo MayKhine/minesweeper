@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-:root,
+html,
 body {
   margin: 0;
   width: 100%;
@@ -13,4 +13,9 @@ body {
   font-family: "Share Tech Mono", serif;
   font-weight: 400;
   font-style: normal;
+  color: #3e3e3e;
+}
+
+#root {
+  height: 100%;
 }

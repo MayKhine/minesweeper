@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-
+import { colors } from "../../tokens.stylex"
 export type PopUpModalProps = {
   text: string
   buttonText: string
@@ -32,7 +32,7 @@ export const PopUpModal = ({
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     width: "100%",
     height: "100%",
     zIndex: "1",
@@ -47,7 +47,7 @@ const styles = stylex.create({
     padding: "2rem",
     paddingLeft: "4rem",
     paddingRight: "4rem",
-    backgroundColor: "lightgray",
+    backgroundColor: `${colors.gray1}`,
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
@@ -59,13 +59,13 @@ const styles = stylex.create({
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: `${colors.black}`,
+    color: `${colors.white}`,
     padding: ".5rem",
-    border: "1px solid black",
-    color: "white",
     fontSize: ".8rem",
     fontWeight: "600",
     display: "flex",
     justifyContent: "center",
+    cursor: "pointer",
   },
 })

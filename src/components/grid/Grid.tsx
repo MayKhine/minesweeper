@@ -70,11 +70,8 @@ const calcuateNearbyMines = (
 type GridProps = {
   win: () => void
   lost: () => void
-  // gridSize: number
-  // mineSize: number
 }
 export const Grid = ({ win, lost }: GridProps) => {
-  // console.log("GRID : ", gridSize, mineSize)
   const [gridSize, setGridSize] = useState(5)
   const [mineSize, setMineSize] = useState(5)
 
@@ -262,8 +259,6 @@ export const Grid = ({ win, lost }: GridProps) => {
   }
 
   const [gridArr, setGridArr] = useState<Array<Array<ItemType>>>([])
-  // const gridSize = 3
-  // const mineSize = 1
 
   const startNewGame = useCallback(() => {
     setShowMines(false)
@@ -330,7 +325,8 @@ export const Grid = ({ win, lost }: GridProps) => {
       )}
 
       <div {...stylex.props(styles.curGameInfoContainer)}>
-        <div {...stylex.props(styles.gameOptionsContainer)}>
+        <div //{...stylex.props(styles.gameOptionsContainer)}
+        >
           <GameOptions
             setGridSize={(gridSize: number) => {
               setGridSize(gridSize)
@@ -379,55 +375,24 @@ const styles = stylex.create({
   base: {
     width: "100%",
     height: "100%",
-    // "@media (max-width: 576px)": {
-    //   width: "100%",
-    // },
-
-    // "@media (min-width: 577px) ": {
-    //   width: "35rem",
-    // },
   },
   timer: {
     fontSize: "2rem",
   },
   curGameInfoContainer: {
     width: "100%",
-    // fontSize: "2rem",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    // justifyItems: "flex-end",
-    // alignItems: "flex-end",
     marginBottom: "2rem",
   },
-
-  gameOptionsContainer: {
-    // backgroundColor: "pink"
-  },
   gameStatusContainer: {
-    // backgroundColor: "lightyellow",
     display: "flex",
     flexDirection: "column",
-    // justifyItems: "flex-end",
     alignItems: "flex-end",
     justifyContent: "flex-end",
   },
-  // gridContainer: {
-  //   backgroundColor: "red",
-  //   display: "flex",
-  //   flexDirection: "column",
-  //   alignItems: "center",
-  //   justifyItems: "center",
-  //   // width: "100%",
-
-  //   width: {
-  //     default: "55rem",
-  //     "@media (max-width: 768px)": "100%",
-  //     "@media (min-width: 769px) and (max-width: 992px)": "50rem",
-  //   },
-  // },
   gridContainer: {
-    // backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -438,7 +403,6 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "lightyellow",
     margin: "0",
   },
 })

@@ -209,8 +209,9 @@ const styles = stylex.create({
     padding: ".5rem",
     backgroundColor: {
       // default: "gray",
-      ":hover": "lightgray",
+      ":hover": "gray",
     },
+    cursor: "pointer",
   },
   selection: {
     border: ".1rem solid black",
@@ -220,5 +221,6 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    cursor: "pointer",
   },
 })
