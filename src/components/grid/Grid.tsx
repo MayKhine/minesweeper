@@ -75,8 +75,8 @@ type GridProps = {
 }
 export const Grid = ({ win, lost }: GridProps) => {
   // console.log("GRID : ", gridSize, mineSize)
-  const [gridSize, setGridSize] = useState(3)
-  const [mineSize, setMineSize] = useState(3)
+  const [gridSize, setGridSize] = useState(5)
+  const [mineSize, setMineSize] = useState(5)
 
   const [game, setGame] = useState("on")
   const [, setRevealNodesCount] = useState<number>(0)
@@ -224,6 +224,7 @@ export const Grid = ({ win, lost }: GridProps) => {
           setGame("win")
           setRevealNodesCount(0)
           showAllBombs(arr)
+          setIsRunning(false)
         }
         return newCount
       })
@@ -408,7 +409,7 @@ const styles = stylex.create({
     justifyContent: "flex-end",
   },
   gridContainer: {
-    backgroundColor: "black",
+    backgroundColor: "pink",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -419,7 +420,8 @@ const styles = stylex.create({
   xArr: {
     display: "flex",
     flexDirection: "row",
-    // border: ".05rem solid black",
+    width: "100%",
+    backgroundColor: "lightyellow",
     margin: "0",
   },
 })

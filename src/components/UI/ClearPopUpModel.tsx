@@ -11,7 +11,7 @@ export const ClearPopUpModel = ({ closePopUp }: ClearPopUpModelProps) => {
 
 const popUpModalStyles = styleX.create({
   base: {
-    backgroundColor: "rgba(167, 84, 84, 0.3)",
+    backgroundColor: "rgba(167, 84, 84, 0)",
     width: "100%",
     height: "100%",
     zIndex: "1",

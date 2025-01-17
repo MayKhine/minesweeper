@@ -76,14 +76,18 @@ export const GridItem = ({
 
 const gridItemStyles = stylex.create({
   base: {
-    height: "2rem",
-    width: "2rem",
+    // height: "2rem",
+    // width: "2rem",
     border: "1px lightgray solid",
     fontSize: "1rem",
     display: "flex",
     flexDirection: "column",
     textAlign: "center",
     justifyContent: "center",
+    width: "100%",
+    // height: "100%",
+    // width: "4rem",
+    aspectRatio: "1",
   },
   dynamicOption: (mine, nearByMine, mask) => ({
     backgroundColor:

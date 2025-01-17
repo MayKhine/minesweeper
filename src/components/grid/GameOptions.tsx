@@ -16,30 +16,73 @@ export const GameOptions = ({ setGridSize, setMineSize }: GameOptionsProps) => {
   const [dropDownMenuGameDifficulty, setDropDownMenuGameDifficulty] =
     useState(false)
 
-  const calculateGridSize = () => {
-    console.log("Cal grid size", gameSize)
-    if (gameSize === "small") {
-      return 3
+  const gameSizeHandler = (val: string) => {
+    setGameSize(val)
+    if (val === "small") {
+      setGridSize(5)
+      const mineSize = calculateMineSize(gameDifficulty, 5)
+      console.log("MINE SIZE: ", mineSize)
+      setMineSize(mineSize)
     }
-    if (gameSize === "medium") {
+    if (val === "medium") {
+      setGridSize(9)
+      const mineSize = calculateMineSize(gameDifficulty, 9)
+      console.log("MINE SIZE: ", mineSize)
+      setMineSize(mineSize)
+    }
+    if (val === "large") {
+      setGridSize(16)
+      const mineSize = calculateMineSize(gameDifficulty, 16)
+      console.log("MINE SIZE: ", mineSize)
+      setMineSize(mineSize)
+    }
+    //when grid szie chagnes, mine should change too
+    // gameDifficultyHandler(gameDifficulty)
+    setDropDownMenuGameSize(false)
+  }
+
+  const gameDifficultyHandler = (val: string) => {
+    console.log("Grid Size: ", gameSize, "Game : ", val)
+    setDropDownMenuGameDifficulty(false)
+    setGameDifficulty(val)
+    const mineSize = calculateMineSize(val)
+    console.log("MINE SIZE: ", mineSize)
+    setMineSize(mineSize)
+  }
+
+  const calculateGridSize = () => {
+    if (gameSize === "small") {
       return 5
     }
-    if (gameSize === "large") {
+    if (gameSize === "medium") {
       return 9
+    }
+    if (gameSize === "large") {
+      return 16
     }
     return 1
   }
 
-  const calculateMineSize = () => {
-    const gridSize = calculateGridSize()
-    if (gameDifficulty === "easy") {
-      return Math.round(gridSize * gridSize * 0.1)
+  const calculateMineSize = (
+    gameDifficultyValue: string,
+    gridSizeVal?: number
+  ) => {
+    const gridSize = gridSizeVal ? gridSizeVal : calculateGridSize()
+
+    if (gameDifficultyValue === "easy") {
+      const mine = Math.round(gridSize * gridSize * 0.1)
+      console.log("Calc mine: ", gameDifficulty, "Mine: ", mine)
+      return mine
     }
-    if (gameDifficulty === "medium") {
-      return Math.round(gridSize * gridSize * 0.15)
+    if (gameDifficultyValue === "medium") {
+      const mine = Math.round(gridSize * gridSize * 0.15)
+      console.log("Calc mine: ", gameDifficulty, "Mine: ", mine)
+      return mine
     }
-    if (gameDifficulty === "difficult") {
-      return Math.round(gridSize * gridSize * 0.2)
+    if (gameDifficultyValue === "difficult") {
+      const mine = Math.round(gridSize * gridSize * 0.2)
+      console.log("Calc mine: ", gameDifficulty, "Mine: ", mine)
+      return mine
     }
     return 1
   }
@@ -65,28 +108,25 @@ export const GameOptions = ({ setGridSize, setMineSize }: GameOptionsProps) => {
               />
               <div {...stylex.props(styles.dropDownMenu)}>
                 <div
-                  onClick={() => {
-                    setGameSize("small")
-                    setGridSize(3)
-                    setDropDownMenuGameSize(false)
+                  {...stylex.props(styles.dropDownButton)}
+                  onClickCapture={() => {
+                    gameSizeHandler("small")
                   }}
                 >
                   small
                 </div>
                 <div
-                  onClick={() => {
-                    setGameSize("medium")
-                    setGridSize(5)
-                    setDropDownMenuGameSize(false)
+                  {...stylex.props(styles.dropDownButton)}
+                  onClickCapture={() => {
+                    gameSizeHandler("medium")
                   }}
                 >
                   med
                 </div>
                 <div
-                  onClick={() => {
-                    setGameSize("large")
-                    setGridSize(9)
-                    setDropDownMenuGameSize(false)
+                  {...stylex.props(styles.dropDownButton)}
+                  onClickCapture={() => {
+                    gameSizeHandler("large")
                   }}
                 >
                   large
@@ -114,30 +154,25 @@ export const GameOptions = ({ setGridSize, setMineSize }: GameOptionsProps) => {
               />
               <div {...stylex.props(styles.dropDownMenu)}>
                 <div
+                  {...stylex.props(styles.dropDownButton)}
                   onClick={() => {
-                    setGameDifficulty("easy")
-                    setMineSize(calculateMineSize())
-                    setDropDownMenuGameDifficulty(false)
+                    gameDifficultyHandler("easy")
                   }}
                 >
                   easy
                 </div>
                 <div
+                  {...stylex.props(styles.dropDownButton)}
                   onClick={() => {
-                    setGameDifficulty("medium")
-                    setMineSize(calculateMineSize())
-
-                    setDropDownMenuGameDifficulty(false)
+                    gameDifficultyHandler("medium")
                   }}
                 >
                   med
                 </div>
                 <div
+                  {...stylex.props(styles.dropDownButton)}
                   onClick={() => {
-                    setGameDifficulty("difficult")
-                    setMineSize(calculateMineSize())
-
-                    setDropDownMenuGameDifficulty(false)
+                    gameDifficultyHandler("difficult")
                   }}
                 >
                   difficult
@@ -162,15 +197,25 @@ const styles = stylex.create({
   dropDownMenu: {
     position: "absolute",
     zIndex: 2,
-    backgroundColor: "yellow",
+    marginTop: ".2rem",
+    border: ".1rem solid black",
+    backgroundColor: "lightgray",
     display: "flex",
     flexDirection: "column",
-    width: "7rem",
+    width: "8rem",
+    // padding: ".5rem",
+  },
+  dropDownButton: {
+    padding: ".5rem",
+    backgroundColor: {
+      // default: "gray",
+      ":hover": "lightgray",
+    },
   },
   selection: {
     border: ".1rem solid black",
     // backgroundColor: "white",
-    width: "7.5rem",
+    width: "8rem",
     padding: ".5rem",
     display: "flex",
     flexDirection: "row",
