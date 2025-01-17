@@ -77,6 +77,27 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
   const [game, setGame] = useState("on")
   const [, setRevealNodesCount] = useState<number>(0)
   const [showMines, setShowMines] = useState(false)
+  const [timerSec, setTimerSec] = useState(0)
+  const [isRunning, setIsRunning] = useState(false)
+
+  useEffect(() => {
+    let timer: number
+
+    if (isRunning) {
+      timer = setInterval(() => {
+        setTimerSec((prevTime) => prevTime + 1)
+      }, 1000)
+    }
+    return () => clearInterval(timer) // Cleanup on component unmount or stop
+  }, [isRunning])
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${minutes.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`
+  }
 
   const getNeighbourNodes = (x: number, y: number) => {
     const result = []
@@ -163,6 +184,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
       showAllBombs(arr)
       setGame("over")
       setShowMines(true)
+      setIsRunning(false)
       return
     }
 
@@ -178,7 +200,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
       setRevealNodesCount((prevCount) => {
         //if the first click, start the timer
         if (prevCount == 0) {
-          console.log("Start the timer: ")
+          setIsRunning(true)
         }
 
         const newCount = prevCount + 1
@@ -230,6 +252,8 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
 
   const startNewGame = useCallback(() => {
     setShowMines(false)
+    setTimerSec(0)
+
     console.log("new game: ", gridSize)
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
@@ -259,11 +283,13 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
 
   return (
     <div
-      {...stylex.props(gridStyles.base)}
+      {...stylex.props(styles.base)}
       onContextMenu={(e) => {
         e.preventDefault()
       }}
     >
+      <div {...stylex.props(styles.timer)}> Timer : {formatTime(timerSec)}</div>
+
       {game == "over" && (
         <PopUpModal
           text="OVER TEXT"
@@ -292,7 +318,7 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
       )}
       {gridArr.map((eachArr, key) => {
         return (
-          <div {...stylex.props(gridStyles.xArr)} key={key}>
+          <div {...stylex.props(styles.xArr)} key={key}>
             {eachArr.map((item: ItemType, key) => {
               return (
                 <GridItem
@@ -310,11 +336,10 @@ export const Grid = ({ win, lost, gridSize, mineSize }: GridProps) => {
         )
       })}
     </div>
-    // <div> TEST</div>
   )
 }
 
-const gridStyles = stylex.create({
+const styles = stylex.create({
   base: {
     backgroundColor: "gray",
     // alignItems: "center",
@@ -322,4 +347,8 @@ const gridStyles = stylex.create({
     height: "100%",
   },
   xArr: { display: "flex", flexDirection: "row" },
+  timer: {
+    backgroundColor: "lightgray",
+    padding: "1rem",
+  },
 })

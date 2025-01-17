@@ -33,9 +33,11 @@ export const PopUpModal = ({
 const popUpModalStyles = styleX.create({
   base: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    width: "100vw",
-    height: "90vh",
+    width: "100%",
+    height: "100%",
     zIndex: "1",
+    left: 0,
+    top: 0,
     position: "absolute",
     display: "flex",
     justifyContent: "center",
