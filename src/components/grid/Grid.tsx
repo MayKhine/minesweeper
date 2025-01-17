@@ -66,11 +66,15 @@ const calcuateNearbyMines = (
   return false
 }
 
-export const Grid = () => {
+type GridProps = {
+  win: () => void
+  lost: () => void
+}
+export const Grid = ({ win, lost }: GridProps) => {
   // const [timer, setTimer] = useState(0)
   const [game, setGame] = useState("on")
   // const [startNew, setStartNew] = useState(false)
-  const [, setRevealNodesCount] = useState(0)
+  const [, setRevealNodesCount] = useState<number>(0)
 
   const getNeighbourNodes = (x: number, y: number) => {
     const result = []
@@ -149,6 +153,8 @@ export const Grid = () => {
     if (mine) {
       showAllBombs(arr)
       setGame("over")
+      // setWinLostFunc("lose")
+      // lost()
       return
     }
 
@@ -174,6 +180,9 @@ export const Grid = () => {
           setGame("win")
           setRevealNodesCount(0)
           showAllBombs(arr)
+          // setWinLostFunc("win")
+          win()
+          return
         }
         return newCount
       })
@@ -218,8 +227,8 @@ export const Grid = () => {
   }
 
   const [gridArr, setGridArr] = useState<Array<Array<ItemType>>>([])
-  const gridSize = 5
-  const mineSize = 5
+  const gridSize = 3
+  const mineSize = 2
 
   const startNewGame = useCallback(() => {
     const arr = generateArrayOfArr(gridSize)
@@ -237,6 +246,16 @@ export const Grid = () => {
     startNewGame()
   }, [startNewGame])
 
+  // const winRef = useRef(win)
+  // const lostRef = useRef(lost)
+  useEffect(() => {
+    if (game === "win") {
+      win()
+    }
+    if (game === "over") {
+      lost()
+    }
+  }, [game])
   return (
     <div
       {...stylex.props(gridStyles.base)}
@@ -274,7 +293,6 @@ export const Grid = () => {
         return (
           <div {...stylex.props(gridStyles.xArr)} key={key}>
             {eachArr.map((item: ItemType, key) => {
-              // calcuateNearbyMines(item.x, item.y, arr)
               return (
                 <GridItem
                   item={item}
