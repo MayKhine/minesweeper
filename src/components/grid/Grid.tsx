@@ -81,7 +81,9 @@ export const Grid = ({ win, lost }: GridProps) => {
   const [timerSec, setTimerSec] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [flagSize, setFlagSize] = useState(0)
-
+  const [lastBombClick, setLastBombClick] = useState<Array<number>>([
+    -999999, -999999,
+  ])
   useEffect(() => {
     let timer: number
 
@@ -196,6 +198,7 @@ export const Grid = ({ win, lost }: GridProps) => {
       setGame("over")
       setShowMines(true)
       setIsRunning(false)
+      setLastBombClick([x, y])
       return
     }
 
@@ -264,6 +267,7 @@ export const Grid = ({ win, lost }: GridProps) => {
     setShowMines(false)
     setTimerSec(0)
     setFlagSize(0)
+    setLastBombClick([-999999, -999999])
     console.log("new game: ", gridSize)
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
@@ -360,6 +364,7 @@ export const Grid = ({ win, lost }: GridProps) => {
                     game={game}
                     showMines={showMines}
                     gridSize={gridSize}
+                    lastBombClick={lastBombClick}
                   />
                 )
               })}

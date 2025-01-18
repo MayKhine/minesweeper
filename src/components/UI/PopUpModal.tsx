@@ -51,6 +51,7 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
+    opacity: ".5",
   },
   text: {
     fontSize: "1.2rem",

@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { FaBomb } from "react-icons/fa"
 import { MdFlag } from "react-icons/md"
 import { colors } from "../../tokens.stylex"
+import { useState } from "react"
 export type ItemType = {
   x: number
   y: number
@@ -26,6 +27,7 @@ export type GridItemProps = {
   game: string
   showMines: boolean
   gridSize: number
+  lastBombClick: Array<number>
 }
 
 export const GridItem = ({
@@ -36,12 +38,16 @@ export const GridItem = ({
   game,
   showMines,
   gridSize,
+  lastBombClick,
 }: GridItemProps) => {
+  // const [toggleBgMine, setToggleBgMine] = useState(false)
+
+  // console.log("last bom click : ", lastBombClick, lastBombClick[0])
   return (
     <div
       {...stylex.props(
         styles.base(gridSize),
-        styles.dynamicOption(item.mine, item.nearByMine, item.mask)
+        styles.dynamicOption(item.nearByMine, item.mask)
       )}
       onClick={() => {
         if (item.flag || item.mask == false || game != "on") {
@@ -58,13 +64,17 @@ export const GridItem = ({
     >
       {item.flag && item.mask && (
         <div {...stylex.props(styles.textSize(gridSize))}>
-          <MdFlag color={colors.black} />
+          <MdFlag color={colors.white} />
         </div>
       )}
-
       {showMines && item.mine && (
-        <div {...stylex.props(styles.textSize(gridSize))}>
-          <FaBomb color={colors.black} />
+        <div
+          {...stylex.props(
+            styles.textSize(gridSize),
+            styles.bombColor(lastBombClick, item.x, item.y)
+          )}
+        >
+          <FaBomb />
         </div>
       )}
 
@@ -76,6 +86,35 @@ export const GridItem = ({
             {item.nearByMine}
           </div>
         )}
+
+      {/* {!toggleBgMine && (
+        <div>
+          {item.flag && item.mask && (
+            <div {...stylex.props(styles.textSize(gridSize))}>
+              <MdFlag color={colors.white} />
+            </div>
+          )}
+          {showMines && item.mine && (
+            <div {...stylex.props(styles.textSize(gridSize))}>
+              <FaBomb color={colors.black} />
+            </div>
+          )}
+          {!item.mine &&
+            !item.flag &&
+            item.nearByMine > 0 &&
+            item.mask == false && (
+              <div {...stylex.props(styles.textSize(gridSize))}>
+                {item.nearByMine}
+              </div>
+            )}
+        </div>
+      )}
+
+      {toggleBgMine && (
+        <div {...stylex.props(styles.textSize(gridSize))}>
+          <FaBomb color={"red"} />
+        </div>
+      )} */}
     </div>
   )
 }
@@ -97,18 +136,35 @@ const styles = stylex.create({
     justifyContent: "center",
     width: "100%",
     aspectRatio: "1",
+    height: "100%",
   }),
-  dynamicOption: (mine, nearByMine, mask) => ({
+  dynamicOption: (nearByMine, mask) => ({
     backgroundColor:
       mask == false
-        ? mine
-          ? "red"
-          : nearByMine > 0
+        ? nearByMine > 0
           ? `${colors.gray2}`
           : `${colors.gray1}`
         : `${colors.gray4}`,
   }),
+
   textSize: (gridSize: number) => ({
+    with: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: gridSize == 5 ? "2rem" : gridSize == 9 ? "1.5rem" : "1rem",
   }),
+  bombColor: (lastBombClick, x, y) => ({
+    width: "100%",
+    height: "100%",
+    backgroundColor:
+      lastBombClick[0] === x && lastBombClick[1] === y ? "red" : "black",
+  }),
+  test: {
+    backgroundColor: "pink",
+    width: "100%",
+    height: "100%",
+  },
 })
