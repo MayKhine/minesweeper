@@ -4,6 +4,7 @@ import * as stylex from "@stylexjs/stylex"
 // import { ClearPopUpModel } from "./components/UI/ClearPopUpModel"
 import { RiArrowDownSLine } from "react-icons/ri"
 import { ClearPopUpModel } from "../UI/ClearPopUpModel"
+import { colors } from "../../tokens.stylex"
 
 type GameOptionsProps = {
   setGridSize: (gridSize: number) => void
@@ -121,7 +122,7 @@ export const GameOptions = ({ setGridSize, setMineSize }: GameOptionsProps) => {
                     gameSizeHandler("medium")
                   }}
                 >
-                  med
+                  medium
                 </div>
                 <div
                   {...stylex.props(styles.dropDownButton)}
@@ -167,7 +168,7 @@ export const GameOptions = ({ setGridSize, setMineSize }: GameOptionsProps) => {
                     gameDifficultyHandler("medium")
                   }}
                 >
-                  med
+                  medium
                 </div>
                 <div
                   {...stylex.props(styles.dropDownButton)}
@@ -208,13 +209,13 @@ const styles = stylex.create({
   dropDownButton: {
     padding: ".5rem",
     backgroundColor: {
-      // default: "gray",
-      ":hover": "gray",
+      default: `${colors.gray2}`,
+      ":hover": `${colors.gray1}`,
     },
     cursor: "pointer",
   },
   selection: {
-    border: ".1rem solid black",
+    border: `3px solid ${colors.gray4}`,
     // backgroundColor: "white",
     width: "8rem",
     padding: ".5rem",

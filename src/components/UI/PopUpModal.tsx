@@ -32,7 +32,7 @@ export const PopUpModal = ({
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0)",
     width: "100%",
     height: "100%",
     zIndex: "1",
@@ -51,7 +51,7 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
-    opacity: ".5",
+    // opacity: ".5",
   },
   text: {
     fontSize: "1.2rem",

@@ -74,7 +74,7 @@ export const GridItem = ({
             styles.bombColor(lastBombClick, item.x, item.y)
           )}
         >
-          <FaBomb />
+          <FaBomb color={colors.black} />
         </div>
       )}
 
@@ -86,35 +86,6 @@ export const GridItem = ({
             {item.nearByMine}
           </div>
         )}
-
-      {/* {!toggleBgMine && (
-        <div>
-          {item.flag && item.mask && (
-            <div {...stylex.props(styles.textSize(gridSize))}>
-              <MdFlag color={colors.white} />
-            </div>
-          )}
-          {showMines && item.mine && (
-            <div {...stylex.props(styles.textSize(gridSize))}>
-              <FaBomb color={colors.black} />
-            </div>
-          )}
-          {!item.mine &&
-            !item.flag &&
-            item.nearByMine > 0 &&
-            item.mask == false && (
-              <div {...stylex.props(styles.textSize(gridSize))}>
-                {item.nearByMine}
-              </div>
-            )}
-        </div>
-      )}
-
-      {toggleBgMine && (
-        <div {...stylex.props(styles.textSize(gridSize))}>
-          <FaBomb color={"red"} />
-        </div>
-      )} */}
     </div>
   )
 }
@@ -124,10 +95,10 @@ const styles = stylex.create({
     // border: `2px ${colors.black} solid`,
     border:
       gridSize == 5
-        ? `2.5px ${colors.gray3} solid`
+        ? `2.5px ${colors.gray4} solid`
         : gridSize == 9
-        ? `1.5px ${colors.gray3} solid`
-        : `1px ${colors.gray3} solid`,
+        ? `1.5px ${colors.gray4} solid`
+        : `1px ${colors.gray4} solid`,
 
     fontSize: "1.5em",
     display: "flex",
@@ -144,7 +115,7 @@ const styles = stylex.create({
         ? nearByMine > 0
           ? `${colors.gray2}`
           : `${colors.gray1}`
-        : `${colors.gray4}`,
+        : `${colors.gray3}`,
   }),
 
   textSize: (gridSize: number) => ({
@@ -160,11 +131,8 @@ const styles = stylex.create({
     width: "100%",
     height: "100%",
     backgroundColor:
-      lastBombClick[0] === x && lastBombClick[1] === y ? "red" : "black",
+      lastBombClick[0] === x && lastBombClick[1] === y
+        ? "red"
+        : `${colors.gray1}`,
   }),
-  test: {
-    backgroundColor: "pink",
-    width: "100%",
-    height: "100%",
-  },
 })

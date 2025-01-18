@@ -318,7 +318,6 @@ export const Grid = ({ win, lost }: GridProps) => {
         <PopUpModal
           text="YOU WIN"
           buttonText="One More Game"
-          // gameStatus={game}
           tryAgain={() => {
             startNewGame()
           }}
