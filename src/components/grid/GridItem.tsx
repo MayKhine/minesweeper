@@ -2,7 +2,6 @@ import * as stylex from "@stylexjs/stylex"
 import { FaBomb } from "react-icons/fa"
 import { MdFlag } from "react-icons/md"
 import { colors } from "../../tokens.stylex"
-import { useState } from "react"
 export type ItemType = {
   x: number
   y: number

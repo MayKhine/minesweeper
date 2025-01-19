@@ -215,7 +215,7 @@ const styles = stylex.create({
     cursor: "pointer",
   },
   selection: {
-    border: `3px solid ${colors.gray4}`,
+    border: `4px solid ${colors.gray4}`,
     // backgroundColor: "white",
     width: "8rem",
     padding: ".5rem",

@@ -32,7 +32,7 @@ export const PopUpModal = ({
 
 const styles = stylex.create({
   base: {
-    backgroundColor: "rgba(0, 0, 0, 0)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     width: "100%",
     height: "100%",
     zIndex: "1",
@@ -44,6 +44,7 @@ const styles = stylex.create({
     alignItems: "center",
   },
   textContainer: {
+    border: `4px solid ${colors.white}`,
     padding: "2rem",
     paddingLeft: "4rem",
     paddingRight: "4rem",
@@ -54,7 +55,7 @@ const styles = stylex.create({
     // opacity: ".5",
   },
   text: {
-    fontSize: "1.2rem",
+    fontSize: "1.5rem",
     width: "100%",
     display: "flex",
     justifyContent: "center",
@@ -62,7 +63,7 @@ const styles = stylex.create({
   button: {
     backgroundColor: `${colors.black}`,
     color: `${colors.white}`,
-    padding: ".5rem",
+    padding: "1rem",
     fontSize: ".8rem",
     fontWeight: "600",
     display: "flex",

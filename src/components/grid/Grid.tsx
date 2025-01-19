@@ -4,6 +4,7 @@ import { GridItem, ItemType } from "./GridItem"
 import { useCallback, useEffect, useState } from "react"
 import { PopUpModal } from "../UI/PopUpModal"
 import { GameOptions } from "./GameOptions"
+import { colors } from "../../tokens.stylex"
 
 export type GridArrType = Array<Array<ItemType>>
 
@@ -268,7 +269,7 @@ export const Grid = ({ win, lost }: GridProps) => {
     setTimerSec(0)
     setFlagSize(0)
     setLastBombClick([-999999, -999999])
-    console.log("new game: ", gridSize)
+
     const arr = generateArrayOfArr(gridSize)
     randomlyChangeMines(arr, mineSize, gridSize)
     arr.map((xArr) => {
@@ -282,7 +283,7 @@ export const Grid = ({ win, lost }: GridProps) => {
 
   useEffect(() => {
     startNewGame()
-  }, [startNewGame, gridSize])
+  }, [startNewGame, gridSize, mineSize])
 
   useEffect(() => {
     if (game === "win") {
@@ -328,14 +329,15 @@ export const Grid = ({ win, lost }: GridProps) => {
       )}
 
       <div {...stylex.props(styles.curGameInfoContainer)}>
-        <div //{...stylex.props(styles.gameOptionsContainer)}
-        >
+        <div>
           <GameOptions
             setGridSize={(gridSize: number) => {
               setGridSize(gridSize)
+              setIsRunning(false)
             }}
             setMineSize={(mineSize: number) => {
               setMineSize(mineSize)
+              setIsRunning(false)
             }}
           />
         </div>
@@ -389,12 +391,15 @@ const styles = stylex.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: "2rem",
+    // backgroundColor: "pink",
   },
   gameStatusContainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-end",
     justifyContent: "flex-end",
+    // backgroundColor: "red",
+    marginBottom: "-.5rem",
   },
   gridContainer: {
     display: "flex",
@@ -402,6 +407,7 @@ const styles = stylex.create({
     alignItems: "center",
     justifyItems: "center",
     width: "100%",
+    border: `4px solid ${colors.gray4}`,
   },
   xArr: {
     display: "flex",
