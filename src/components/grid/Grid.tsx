@@ -82,6 +82,7 @@ export const Grid = ({ win, lost }: GridProps) => {
   const [timerSec, setTimerSec] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [flagSize, setFlagSize] = useState(0)
+  const [flagClick, setFlagClick] = useState(false)
   const [lastBombClick, setLastBombClick] = useState<Array<number>>([
     -999999, -999999,
   ])
@@ -330,6 +331,16 @@ export const Grid = ({ win, lost }: GridProps) => {
 
       <div {...stylex.props(styles.curGameInfoContainer)}>
         <div>
+          <div
+            onClick={() => {
+              setFlagClick(!flagClick)
+              console.log("Flag click", flagClick)
+            }}
+          >
+            Flag Click
+          </div>
+        </div>
+        <div>
           <GameOptions
             setGridSize={(gridSize: number) => {
               setGridSize(gridSize)
@@ -366,6 +377,7 @@ export const Grid = ({ win, lost }: GridProps) => {
                     showMines={showMines}
                     gridSize={gridSize}
                     lastBombClick={lastBombClick}
+                    flagClick={flagClick}
                   />
                 )
               })}

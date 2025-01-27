@@ -27,6 +27,7 @@ export type GridItemProps = {
   showMines: boolean
   gridSize: number
   lastBombClick: Array<number>
+  flagClick: boolean
 }
 
 export const GridItem = ({
@@ -38,6 +39,7 @@ export const GridItem = ({
   showMines,
   gridSize,
   lastBombClick,
+  flagClick,
 }: GridItemProps) => {
   // const [toggleBgMine, setToggleBgMine] = useState(false)
 
@@ -49,11 +51,18 @@ export const GridItem = ({
         styles.dynamicOption(item.nearByMine, item.mask)
       )}
       onClick={() => {
-        if (item.flag || item.mask == false || game != "on") {
-          return
+        // if (item.flag || item.mask == false || game != "on") {
+        //   return
+        // }
+        // girdItemClickHandler(item.x, item.y, item.mine, arr)
+        if (flagClick) {
+          toggleFlag(item.x, item.y, arr)
+        } else {
+          if (item.flag || item.mask == false || game != "on") {
+            return
+          }
+          girdItemClickHandler(item.x, item.y, item.mine, arr)
         }
-
-        girdItemClickHandler(item.x, item.y, item.mine, arr)
       }}
       onAuxClick={(e) => {
         if (e.button == 2 && item.mask == true && game == "on") {
