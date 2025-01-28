@@ -204,7 +204,6 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     width: "8rem",
-    // padding: ".5rem",
   },
   dropDownButton: {
     padding: ".5rem",
@@ -216,12 +215,11 @@ const styles = stylex.create({
   },
   selection: {
     border: `4px solid ${colors.gray4}`,
-    // backgroundColor: "white",
     width: "8rem",
-    padding: ".5rem",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     cursor: "pointer",
+    padding: ".5rem",
   },
 })

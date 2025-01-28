@@ -127,7 +127,7 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "row",
     cursor: "pointer",
-    height: "3rem",
+    // height: "3rem",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: flag == true ? `${colors.gray1}` : "white",
