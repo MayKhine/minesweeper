@@ -71,8 +71,9 @@ const calcuateNearbyMines = (
 type GridProps = {
   win: () => void
   lost: () => void
+  flagClick: boolean
 }
-export const Grid = ({ win, lost }: GridProps) => {
+export const Grid = ({ win, lost, flagClick }: GridProps) => {
   const [gridSize, setGridSize] = useState(5)
   const [mineSize, setMineSize] = useState(5)
 
@@ -82,7 +83,6 @@ export const Grid = ({ win, lost }: GridProps) => {
   const [timerSec, setTimerSec] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [flagSize, setFlagSize] = useState(0)
-  const [flagClick, setFlagClick] = useState(false)
   const [lastBombClick, setLastBombClick] = useState<Array<number>>([
     -999999, -999999,
   ])
@@ -330,16 +330,16 @@ export const Grid = ({ win, lost }: GridProps) => {
       )}
 
       <div {...stylex.props(styles.curGameInfoContainer)}>
-        <div>
+        {/* <div>
           <div
             onClick={() => {
-              setFlagClick(!flagClick)
+              setFlagClick()
               console.log("Flag click", flagClick)
             }}
           >
             Flag Click
           </div>
-        </div>
+        </div> */}
         <div>
           <GameOptions
             setGridSize={(gridSize: number) => {

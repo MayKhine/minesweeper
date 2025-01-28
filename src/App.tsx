@@ -27,6 +27,8 @@ function App() {
     }))
   }
 
+  const [flagClick, setFlagClick] = useState(false)
+
   return (
     <div {...stylex.props(styles.page)}>
       <div {...stylex.props(styles.gameContainer)}>
@@ -34,6 +36,31 @@ function App() {
           <div {...stylex.props(styles.logo)}> Minesweeper</div>
 
           <div {...stylex.props(styles.gameInfoContainer)}>
+            <div
+              style={{
+                display: "flex",
+                height: "3rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: ".5rem",
+                }}
+              >
+                Flag:
+              </div>
+              <div
+                {...stylex.props(styles.flagButton(flagClick))}
+                onClick={() => {
+                  setFlagClick(!flagClick)
+                }}
+              >
+                {flagClick == true ? "On" : "Off"}{" "}
+              </div>
+            </div>
             <div {...stylex.props(styles.gameWinLostContainer)}>
               <div> WIN</div>
               <div {...stylex.props(styles.gameNum)}>{games.win}</div>
@@ -43,7 +70,7 @@ function App() {
           </div>
         </div>
         <div {...stylex.props(styles.gridContainer)}>
-          <Grid win={win} lost={lost} />
+          <Grid win={win} lost={lost} flagClick={flagClick} />
         </div>
       </div>
     </div>
@@ -98,4 +125,16 @@ const styles = stylex.create({
   gameNum: {
     fontSize: "2rem",
   },
+  flagButton: (flag: boolean) => ({
+    border: `4px solid ${colors.gray4}`,
+    width: "4.8rem",
+    padding: ".5rem",
+    display: "flex",
+    flexDirection: "row",
+    cursor: "pointer",
+    height: "3rem",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: flag == true ? `${colors.gray1}` : "white",
+  }),
 })
