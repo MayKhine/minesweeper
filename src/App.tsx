@@ -36,12 +36,7 @@ function App() {
           <div {...stylex.props(styles.logo)}> Minesweeper</div>
 
           <div {...stylex.props(styles.gameInfoContainer)}>
-            <div
-              style={{
-                display: "flex",
-                height: "3rem",
-              }}
-            >
+            <div {...stylex.props(styles.flagContainer)}>
               <div
                 style={{
                   display: "flex",
@@ -137,4 +132,11 @@ const styles = stylex.create({
     alignItems: "center",
     backgroundColor: flag == true ? `${colors.gray1}` : "white",
   }),
+  flagContainer: {
+    "@media (min-width: 1280px)": {
+      display: "none",
+    },
+    display: "flex",
+    height: "3rem",
+  },
 })
