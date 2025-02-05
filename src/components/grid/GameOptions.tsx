@@ -198,12 +198,12 @@ const styles = stylex.create({
   dropDownMenu: {
     position: "absolute",
     zIndex: 2,
-    marginTop: ".2rem",
-    border: ".1rem solid black",
+    marginTop: ".3rem",
+    border: `4px solid ${colors.gray4}`,
     backgroundColor: "lightgray",
     display: "flex",
     flexDirection: "column",
-    width: "8rem",
+    width: "9rem",
   },
   dropDownButton: {
     padding: ".5rem",
